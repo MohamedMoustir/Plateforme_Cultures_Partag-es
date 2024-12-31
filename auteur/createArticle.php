@@ -1,5 +1,38 @@
 
 
+<?php
+session_start();
+
+require_once "../class/class_article.php";
+require_once  "../database/connexion.php";
+
+if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['btn_submit'])) {
+    if (isset($_POST['title']) && isset($_POST['description']) && isset($_POST['category'])&& isset($_FILES['avatar'])) {
+
+         $title = $_POST['title'] ;
+         $content = htmlspecialchars($_POST['description']) ;
+         $category_id = htmlspecialchars($_POST['category']);
+         $author_id = $_SESSION['id_users'];
+         $image_path = $_FILES['avatar'];
+         $article = new Article();
+         $article->createArticle($title,$content,$category_id,$author_id,$image_path);
+    
+  }
+}
+
+  $article = new Article();
+  $email = $_SESSION['email'];
+  $articles=$article->afficherArticle($email);
+
+
+?>
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,6 +46,7 @@
 </head>
 
 <body>
+    
 <!-- Side Bar -->
  <div class="fixed top-0 left-0 w-[230px] h-[100%] z-50 overflow-hidden sidebar">
     <a href="#" class="logo text-xl font-bold h-[56px] flex items-center text-[#1976D2] z-30 pb-[20px] box-content">
@@ -105,24 +139,51 @@
 <table class="w-full border-collapse">
     <thead>
         <tr>
+            <th class="pb-3 px-3 text-sm text-left border-b border-grey">Image</th>
             <th class="pb-3 px-3 text-sm text-left border-b border-grey">Title</th>
             <th class="pb-3 px-3 text-sm text-left border-b border-grey">Category</th>
             <th class="pb-3 px-3 text-sm text-left border-b border-grey">Date</th>
             <th class="pb-3 px-5 text-sm text-left border-b border-grey">Action</th>
         </tr>
     </thead>
+    <?php foreach($articles as $article ):?>
     <tbody>
         <tr>
-            <td class="py-4 px-3">Article 1</td>
-            <td class="py-4 px-3">Technology</td>
-            <td class="py-4 px-3">2024-12-30</td>
+            
+            <td class="py-4 px-3 mr-8">
+                <img src="<?= $article['image'] ?>" alt="Article Image" class="w-10 h-10 object-cover rounded-full ">
+            </td>
+            <td class="py-4 px-3"><?= $article['title'] ?></td>
+            <td class="py-4 px-3"><?= $article['names'] ?></td>
+            <td class="py-4 px-3"><?= $article['created_at'] ?></td>
             <td class="py-4 px-3">
                 <a href="editArticle.php?id=1" class="edit-btn"><i class='bx bx-edit-alt'></i></a>
-                <a href=".././controllers/deleteArticle.php?id=1"><i class="fa-solid fa-trash text-red-600"></i></a>
+                <a href="../controllers/deleteArticle.php?id=1"><i class="fa-solid fa-trash text-red-600"></i></a>
+                
+      <button type="button"
+        class="px-2 py-2 flex items-center justify-center text-white text-sm tracking-wider font-semibold border-none outline-none bg-purple-600 hover:bg-purple-700 active:bg-purple-600">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18px" fill="#fff" class="mr-2 inline animate-spin"
+          viewBox="0 0 26.349 26.35">
+          <circle cx="13.792" cy="3.082" r="3.082" data-original="#000000" />
+          <circle cx="13.792" cy="24.501" r="1.849" data-original="#000000" />
+          <circle cx="6.219" cy="6.218" r="2.774" data-original="#000000" />
+          <circle cx="21.365" cy="21.363" r="1.541" data-original="#000000" />
+          <circle cx="3.082" cy="13.792" r="2.465" data-original="#000000" />
+          <circle cx="24.501" cy="13.791" r="1.232" data-original="#000000" />
+          <path
+            d="M4.694 19.84a2.155 2.155 0 0 0 0 3.05 2.155 2.155 0 0 0 3.05 0 2.155 2.155 0 0 0 0-3.05 2.146 2.146 0 0 0-3.05 0z"
+            data-original="#000000" />
+          <circle cx="21.364" cy="6.218" r=".924" data-original="#000000" />
+        </svg>
+        Loading
+      </button>
             </td>
+           
         </tr>
     </tbody>
+     <?php endforeach;?>
 </table>
+
 <!-- end tables -->
  </div>
  </div>
@@ -134,7 +195,7 @@
       
 
         <h2 class="text-2xl font-semibold mb-4">Add New Article</h2>
-        <form action="addArticle.php" method="POST" enctype="multipart/form-data">
+        <form action="" method="POST" enctype="multipart/form-data">
             <div class="mb-4">
                 <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
                 <input type="text" id="title" name="title" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
@@ -143,10 +204,10 @@
             <div class="mb-4">
                 <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
                 <select id="category" name="category" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
-                    <option value="Technology">Technology</option>
-                    <option value="Health">Health</option>
-                    <option value="Lifestyle">Lifestyle</option>
-                    <option value="Business">Business</option>
+                    <option value="1">Technology</option>
+                    <option value="2">Health</option>
+                    <option value="3">Lifestyle</option>
+                    <option value="4">Business</option>
                 </select>
             </div>
 
@@ -158,11 +219,11 @@
             <!-- File Upload Section -->
             <div class="mb-4">
                 <label for="file" class="block text-sm font-medium text-gray-700">Upload File</label>
-                <input type="file" id="file" name="file" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <input type="file" id="file" name="avatar" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
             </div>
 
             <div class="flex items-center justify-between">
-                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-700">Add Article</button>
+                <button type="submit" name="btn_submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-700">Add Article</button>
                 <button type="button" id="closeModal" class="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-700">Close</button>
             </div>
         </form>
