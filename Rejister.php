@@ -1,5 +1,4 @@
 
-
 <?php
 require_once  "./database/connexion.php";
 require_once   "class/class_rejister.php";
@@ -13,17 +12,14 @@ if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['btn_submit'])) {
 
    $register = new Register();
    $register->insertUtilisateurs($username, $email, $password, $role);
-
+if ($register) {
+    header('location:login.php');
+    exit();
+}
   }
-
 }
 
-
 ?>
-
-
-
-
 
 
 <!DOCTYPE html>
