@@ -1,3 +1,31 @@
+
+
+<?php
+require_once  "./database/connexion.php";
+require_once   "class/class_rejister.php";
+
+if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['btn_submit'])) {
+  if (isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['role'])) {
+       $username = $_POST['name'] ;
+       $email = $_POST['email'] ;
+       $password = $_POST['password'];
+       $role = $_POST['role'];
+
+   $register = new Register();
+   $register->insertUtilisateurs($username, $email, $password, $role);
+
+  }
+
+}
+
+
+?>
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -117,7 +145,7 @@
 
             <!-- Form Body -->
             <div class="p-6 space-y-6">
-                <form method="post" action="./src/singup.php" class="space-y-6">
+                <form method="POST" action="" class="space-y-6">
                     <div class="input-group">
                         <label class="block text-secondary mb-2">
                             <i class="fas fa-user mr-2"></i>Full Name
@@ -168,13 +196,13 @@
                         >
                             <option value="" disabled selected>Select your role</option>
                             <option value="auteur">Auteur</option>
-                            <option value="utilisateur">Utilisateur</option>
+                            <option value="user">Utilisateur</option>
                         </select>
                     </div>
 
                     <button 
                         type="submit"
-                        name="signup" 
+                        name="btn_submit" 
                         class="w-full bg-primary text-white py-3 rounded-lg hover:bg-opacity-90 transition-all duration-200 flex items-center justify-center"
                     >
                         <i class="fas fa-user-plus mr-2"></i>
