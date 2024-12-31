@@ -1,6 +1,13 @@
 
 
+<?php
+require_once "class/class_article.php";
+require_once  "database/connexion.php";
 
+ $article = new Article();
+ $articleapproved=$article->afficherArticleApproved();
+var_dump($articleapproved);
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -155,6 +162,8 @@
                             <p>Eirmod sed ipsum dolor sit rebum labore magna erat. Tempor ut dolore lorem kasd vero ipsum sit eirmod sit diam justo sed rebum.</p>
                         </div>
                     </div>
+                    
+
                     <div class="col-lg-6 text-start text-lg-end wow slideInRight" data-wow-delay="0.1s">
                         <ul class="nav nav-pills d-inline-flex justify-content-end mb-5">
                             <li class="nav-item me-2">
@@ -169,10 +178,13 @@
                         </ul>
                     </div>
                 </div>
+               
+
                 <div class="tab-content">
                     <div id="tab-1" class="tab-pane fade show p-0 active">
+                    
                         <div class="row g-4">
-   
+                       <?php foreach($articleapproved as $article ):?>
                             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
                                 <div class="property-item rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 bg-white">
                                     <!-- Image Section -->
@@ -218,7 +230,7 @@
                                 </div>
                             </div>
                             
-
+                            <?php endforeach;?>
                             
                           
                         </div>

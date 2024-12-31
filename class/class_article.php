@@ -69,6 +69,28 @@
  }
 
 
+ public function afficherArticleApproved(){
+    try {
+        $query = "SELECT * FROM article
+        JOIN utilisateurs ON article.author_id = utilisateurs.utilisateurID
+        WHERE article.status ='approved'";
+
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute();
+        $articleapproved = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $articleapproved;
+        
+    } catch (PDOException $e) {
+        echo "Errors: " . $e->getMessage();
+    }
+ }
+
+
+//  public editArticle();
+//  public annuleArticle();
+
+
+
 
 
 

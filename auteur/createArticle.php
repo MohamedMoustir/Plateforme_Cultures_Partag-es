@@ -136,54 +136,73 @@ if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['btn_submit'])) {
         <h3 class="mr-auto text-[24px] font-semibold">Articles List</h3>
 </div>
 <!--- tables---->
-<table class="w-full border-collapse">
+<table class="w-full border-collapse table-auto">
     <thead>
         <tr>
-            <th class="pb-3 px-3 text-sm text-left border-b border-grey">Image</th>
-            <th class="pb-3 px-3 text-sm text-left border-b border-grey">Title</th>
-            <th class="pb-3 px-3 text-sm text-left border-b border-grey">Category</th>
-            <th class="pb-3 px-3 text-sm text-left border-b border-grey">Date</th>
-            <th class="pb-3 px-5 text-sm text-left border-b border-grey">Action</th>
+            <th class="pb-3 px-3 text-sm text-center border-b border-grey">Image</th>
+            <th class="pb-3 px-3 text-sm text-center border-b border-grey">Title</th>
+            <th class="pb-3 px-3 text-sm text-center border-b border-grey">Category</th>
+            <th class="pb-3 px-3 text-sm text-center border-b border-grey">Date</th>
+            <th class="pb-3 px-5 text-sm text-center border-b border-grey">Action</th>
         </tr>
     </thead>
-    <?php foreach($articles as $article ):?>
     <tbody>
-        <tr>
+    <?php foreach ($articles as $article): ?>
+    <?php 
+        // Gérer l'état des icônes et de l'affichage
+        if ($article['status'] == 'pending') {
+            $type = 'hidden'; 
+            $types = 'block';
+            $approved = 'hidden';
+        } elseif ($article['status'] == 'rejected') {
+            $type = 'block'; 
+            $types = 'hidden';
+            $approved = 'hidden';
+        } elseif ($article['status'] == 'approved') {
+            $type = 'hidden';
+            $types = 'hidden';
+            $approved = 'block'; 
+        } else {
+            $type = 'hidden'; 
+            $types = 'hidden';
+            $approved = 'hidden';
+        }
+    ?>
+    <tr>
+        <td class="py-4 px-3 text-center">
+            <img src="<?= $article['image'] ?>" alt="Article Image" class="w-10 h-10 object-cover rounded-full mx-auto">
+        </td>
+        <td class="py-4 px-3 text-center"><?= $article['title'] ?></td>
+        <td class="py-4 px-3 text-center"><?= $article['names'] ?></td>
+        <td class="py-4 px-3 text-center"><?= $article['created_at'] ?></td>
+        <td class="py-4 px-3 text-center space-x-4">
+            <a href="editArticle.php?id=<?= $article['id'] ?>" class="edit-btn">
+                <i class='bx bx-edit-alt text-blue-500'></i>
+            </a>
             
-            <td class="py-4 px-3 mr-8">
-                <img src="<?= $article['image'] ?>" alt="Article Image" class="w-10 h-10 object-cover rounded-full ">
-            </td>
-            <td class="py-4 px-3"><?= $article['title'] ?></td>
-            <td class="py-4 px-3"><?= $article['names'] ?></td>
-            <td class="py-4 px-3"><?= $article['created_at'] ?></td>
-            <td class="py-4 px-3">
-                <a href="editArticle.php?id=1" class="edit-btn"><i class='bx bx-edit-alt'></i></a>
-                <a href="../controllers/deleteArticle.php?id=1"><i class="fa-solid fa-trash text-red-600"></i></a>
-                
-      <button type="button"
-        class="px-2 py-2 flex items-center justify-center text-white text-sm tracking-wider font-semibold border-none outline-none bg-purple-600 hover:bg-purple-700 active:bg-purple-600">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18px" fill="#fff" class="mr-2 inline animate-spin"
-          viewBox="0 0 26.349 26.35">
-          <circle cx="13.792" cy="3.082" r="3.082" data-original="#000000" />
-          <circle cx="13.792" cy="24.501" r="1.849" data-original="#000000" />
-          <circle cx="6.219" cy="6.218" r="2.774" data-original="#000000" />
-          <circle cx="21.365" cy="21.363" r="1.541" data-original="#000000" />
-          <circle cx="3.082" cy="13.792" r="2.465" data-original="#000000" />
-          <circle cx="24.501" cy="13.791" r="1.232" data-original="#000000" />
-          <path
-            d="M4.694 19.84a2.155 2.155 0 0 0 0 3.05 2.155 2.155 0 0 0 3.05 0 2.155 2.155 0 0 0 0-3.05 2.146 2.146 0 0 0-3.05 0z"
-            data-original="#000000" />
-          <circle cx="21.364" cy="6.218" r=".924" data-original="#000000" />
-        </svg>
-        Loading
-      </button>
-            </td>
-           
-        </tr>
-    </tbody>
-     <?php endforeach;?>
-</table>
+            <a href="../controllers/deleteArticle.php?id=<?= $article['id'] ?>">
+                <i class="bx bx-x-circle text-red-600 text-2xl" title="Annulé"></i>
+            </a>
 
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-10 animate-[spin_0.8s_linear_infinite] fill-blue-600 <?= $types ?> block mx-auto mt-2"
+                viewBox="0 0 24 24">
+                <path
+                    d="M12 22c5.421 0 10-4.579 10-10h-2c0 4.337-3.663 8-8 8s-8-3.663-8-8c0-4.336 3.663-8 8-8V2C6.579 2 2 6.58 2 12c0 5.421 4.579 10 10 10z"
+                    data-original="#000000" />
+            </svg>
+
+           
+           
+
+            <i class="<?= $type ?> fa-solid fa-ban text-red-600 text-2xl" title="Rejected"></i>
+
+            <i class="<?= $approved ?> fa-solid fa-check-circle text-green-600 text-2xl" title="Approved"></i>
+        </td>
+    </tr>
+<?php endforeach; ?>
+
+    </tbody>
+</table>
 <!-- end tables -->
  </div>
  </div>

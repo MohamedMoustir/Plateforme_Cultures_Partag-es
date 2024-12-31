@@ -1,12 +1,12 @@
 
 <?php 
-session_start();
+// session_start();
 require_once  "./database/connexion.php";
 require_once   "./class/class_login.php";
 
 if (isset($_GET['logout'])) {
-//   session_unset();
-//   session_destroy();
+  session_unset();
+  session_destroy();
   
 }
 
@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['login'])) {
     }
   
   }
-  echo $_SESSION['role'];
+ 
 ?>
 
 <!DOCTYPE html>
