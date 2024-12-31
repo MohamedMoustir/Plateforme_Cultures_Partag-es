@@ -1,3 +1,31 @@
+
+<?php 
+require_once  "./database/connexion.php";
+require_once   "./class/class_login.php";
+
+if (isset($_GET['logout'])) {
+  session_unset();
+  session_destroy();
+  
+}
+
+if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['login'])) {
+    if ( isset($_POST['email']) && isset($_POST['password']) ) {
+         $email = $_POST['email'] ;
+         $password = $_POST['password'];
+        
+     $register = new login($email, $password);
+  if ($register->IsertionLogin()) {
+    echo "ddd";
+  }else{
+    echo "eeee";
+  }
+    }
+  
+  }
+  echo $_SESSION['role'];
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -118,7 +146,7 @@
 
             <!-- Form Body -->
             <div class="p-6 space-y-6">
-                <form method="post" action="./src/signin.php" class="space-y-6">
+                <form method="POST" action="" class="space-y-6">
                     <div class="input-group">
                         <label class="block text-secondary mb-2">
                             <i class="fas fa-envelope mr-2"></i>Email Address
@@ -156,7 +184,7 @@
 
                     <div class="text-center text-neutral">
                         Don't have an account yet? 
-                        <a href="singup.php" class="text-primary hover:underline">
+                        <a href="Rejister.php" class="text-primary hover:underline">
                             Create an account
                         </a>
                     </div>
