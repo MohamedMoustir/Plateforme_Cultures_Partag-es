@@ -94,6 +94,7 @@
         JOIN utilisateurs ON article.author_id = utilisateurs.utilisateurID 
         JOIN category ON article.category_id = category.CategoryID 
                   WHERE article.status = 'approved'
+                  ORDER by article.id desc
                   LIMIT :starts, :rows_pre_page";
 
         $stmt = $this->pdo->prepare($query);
@@ -128,7 +129,63 @@ public function afficherDetailsArticle($id){
     }
  }
 
-//  public editArticle();
+
+
+
+ public function editArticle(
+    $title,
+    $content,
+    $category_id,
+    $author_id,
+    $upload_img,
+    $id
+) {
+    try {
+        $sql = "UPDATE article SET
+            title = :title,
+            content = :content,
+            category_id = :category_id,
+            author_id = :author_id,
+            image = :upload_img
+            WHERE id = :id";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->bindParam(':title', $title, PDO::PARAM_STR);
+        $stmt->bindParam(':content', $content, PDO::PARAM_STR);
+        $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+        $stmt->bindParam(':author_id', $author_id, PDO::PARAM_INT);
+        $stmt->bindParam(':upload_img', $upload_img, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+        $stmt->execute();
+  if ($stmt) {
+  header('location:../auteur/createArticle.php');
+  }
+        return "Statut de l'activité mis à jour avec succès.";
+    } catch (PDOException $e) {
+        return "Erreur : " . $e->getMessage();
+    }
+}
+
+
+public function removeArticle($id){
+    try {
+        $sql = "DELETE FROM article WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
+        if ($stmt) {
+            header('location:../auteur/createArticle.php');
+            exit();
+        }
+    } catch (PDOException $e) {
+        return "Erreur : " . $e->getMessage();
+    }
+}
+
+
+ //  public editArticle();
 //  public annuleArticle();
 
 
