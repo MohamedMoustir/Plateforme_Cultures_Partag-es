@@ -1,6 +1,8 @@
 
 
 <?php
+
+
  class Article {
   private $title;
   private $content; 
@@ -9,6 +11,7 @@
   private $status;
   private $pdo;
   private $upload_img; 
+
 
 
 
@@ -41,7 +44,7 @@
     $stmt->bindParam(':author_id',$author_id , PDO::PARAM_INT);
     $stmt->bindParam(':upload_img',$this->upload_img,PDO::PARAM_STR);
      $stmt->execute();
-
+     
    }catch (PDOException $e) {
     echo "Errors: " . $e->getMessage();
    }
@@ -55,7 +58,7 @@
         $query = "SELECT * FROM article
         JOIN utilisateurs ON article.author_id = utilisateurs.utilisateurID 
         JOIN category ON article.category_id = category.CategoryID 
-        WHERE utilisateurs.email = :email";
+        WHERE utilisateurs.email = :email ";
 
         $stmt = $this->pdo->prepare($query);
         $stmt->bindParam(':email',$email,PDO::PARAM_STR);
@@ -68,23 +71,62 @@
     }
  }
 
-
  public function afficherArticleApproved(){
     try {
+        $starts = 0;
+        $rows_pre_page = 6;
+
+        $recordQuery = "SELECT COUNT(*) FROM article
+                        JOIN utilisateurs ON article.author_id = utilisateurs.utilisateurID
+                        WHERE article.status = 'approved'";
+        $stmt = $this->pdo->prepare($recordQuery);
+        $stmt->execute();
+        $record = $stmt->fetchColumn();  
+        $this->pages = ceil($record / $rows_pre_page);
+       $page = 0; 
+
+        if (isset($_GET['page-nr'])) {
+            $page = intval($_GET['page-nr']) - 1;
+            $starts = $page * $rows_pre_page;
+        }
+
         $query = "SELECT * FROM article
-        JOIN utilisateurs ON article.author_id = utilisateurs.utilisateurID
-        WHERE article.status ='approved'";
+        JOIN utilisateurs ON article.author_id = utilisateurs.utilisateurID 
+        JOIN category ON article.category_id = category.CategoryID 
+                  WHERE article.status = 'approved'
+                  LIMIT :starts, :rows_pre_page";
 
         $stmt = $this->pdo->prepare($query);
+        $stmt->bindParam(':starts', $starts, PDO::PARAM_INT);  
+        $stmt->bindParam(':rows_pre_page', $rows_pre_page, PDO::PARAM_INT);
         $stmt->execute();
+      
         $articleapproved = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $articleapproved;
+        
+       echo  $pages;
+    } catch (PDOException $e) {
+        echo "Errors: " . $e->getMessage();
+    }
+}
+
+public function afficherDetailsArticle($id){
+    try {
+        $query = "SELECT * FROM article
+        JOIN utilisateurs ON article.author_id = utilisateurs.utilisateurID 
+        JOIN category ON article.category_id = category.CategoryID 
+        WHERE article.id = :id ";
+
+        $stmt = $this->pdo->prepare($query);
+        $stmt->bindParam(':id',$id,PDO::PARAM_INT);
+        $stmt->execute();
+        $article = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $article;
         
     } catch (PDOException $e) {
         echo "Errors: " . $e->getMessage();
     }
  }
-
 
 //  public editArticle();
 //  public annuleArticle();
