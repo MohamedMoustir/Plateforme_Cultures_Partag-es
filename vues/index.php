@@ -258,7 +258,7 @@ require_once  "../database/connexion.php";
       <?php endfor;?>
       <li class="flex items-center justify-center shrink-0 hover:bg-gray-50 border-2 cursor-pointer w-10 h-10 rounded-full">
       
-      <a href="?page-nr=<?= min($pages,(isset($_GET['page-nr']) ? $_GET['page-nr'] : 0) + 1) ?>">
+      <a onclick="loadData()" href="?page-nr=<?= min($pages,(isset($_GET['page-nr']) ? $_GET['page-nr'] : 0) + 1) ?>">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-3 fill-gray-400 rotate-180" viewBox="0 0 55.753 55.753">
           <path
             d="M12.745 23.915c.283-.282.59-.52.913-.727L35.266 1.581a5.4 5.4 0 0 1 7.637 7.638L24.294 27.828l18.705 18.706a5.4 5.4 0 0 1-7.636 7.637L13.658 32.464a5.367 5.367 0 0 1-.913-.727 5.367 5.367 0 0 1-1.572-3.911 5.369 5.369 0 0 1 1.572-3.911z"
@@ -395,6 +395,9 @@ require_once  "../database/connexion.php";
 
     <!-- Template Javascript -->
     <script src="../js/main.js"></script>
+    <script>
+        
+    </script>
 </body>
 
 </html>
