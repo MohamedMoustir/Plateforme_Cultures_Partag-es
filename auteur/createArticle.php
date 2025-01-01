@@ -26,6 +26,18 @@ if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['btn_submit'])) {
   $articles=$article->afficherArticle($email);
 
 
+
+  if (isset($_GET['remove'])) {
+  $id = $_GET['remove'];
+    $article->removeArticle($id);
+  }
+
+  if (isset($_GET['id_article'])) { 
+    $id = $_GET['id'];
+    $article = new Article();
+   $Detail=$article->afficherDetailsArticle($id);
+   var_dump($Detail);
+}
 ?>
 
 
@@ -199,11 +211,11 @@ if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['btn_submit'])) {
         <td class="py-4 px-3 text-center"><?= $article['names'] ?></td>
         <td class="py-4 px-3 text-center"><?= $article['created_at'] ?></td>
         <td class="py-4 px-3 text-center space-x-4">
-            <a href="editArticle.php?id=<?= $article['id'] ?>" class="edit-btn">
+            <a href="../auteur/editeArticle.php?id_article=<?= $article['id'] ?>" class="edit-btn">
                 <i class='bx bx-edit-alt text-blue-500'></i>
             </a>
             
-            <a href="../controllers/deleteArticle.php?id=<?= $article['id'] ?>">
+            <a href="../auteur/createArticle.php?remove=<?= $article['id'] ?>">
                 <i class="bx bx-x-circle text-red-600 text-2xl" title="Annulé"></i>
             </a>
 
@@ -215,11 +227,10 @@ if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['btn_submit'])) {
             </svg>
 
            
-           
+            <span class="<?= $type ?> text-red-600">Refusé</span>
+                 
+            <span class="<?= $approved ?> text-green-600">Approuvé</span>
 
-            <i class="<?= $type ?> fa-solid fa-ban text-red-600 text-2xl" title="Rejected"></i>
-
-            <i class="<?= $approved ?> fa-solid fa-check-circle text-green-600 text-2xl" title="Approved"></i>
         </td>
     </tr>
 <?php endforeach; ?>
