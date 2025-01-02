@@ -40,15 +40,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_submit'])&&isset(
     }
 }
 
-
 //  var_dump($title,$content,$category_id,$author_id,$image_path);
   $article = new Article();
   $email = $_SESSION['email'];
   $articles=$article->afficherArticle($email);
-
-
-
- 
 
   if (isset($_GET['id_article'])) { 
     $id = $_GET['id_article'];
@@ -56,13 +51,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_submit'])&&isset(
    $Detail=$article->afficherDetailsArticle($id);
   
 }
+
+
+  if (!isset($_SESSION['role']) || $_SESSION['role'] === null || $_SESSION['role'] === '') {
+    header('Location: ../login.php');
+    exit;
+  }
 ?>
-
-
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -78,29 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_submit'])&&isset(
 
 <body>
 
-<!-- <div id="success" class=" bg-green-500 fixed right-8 z-[92] top-8 text-white font-semibold tracking-wide flex items-center w-max max-w-sm p-4 rounded-md shadow-md shadow-green-200" role="alert">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-[18px] shrink-0 fill-white inline mr-3" viewBox="0 0 512 512">
-                  <ellipse cx="256" cy="256" fill="#fff" data-original="#fff" rx="256" ry="255.832" />
-                  <path class="fill-green-500"
-                      d="m235.472 392.08-121.04-94.296 34.416-44.168 74.328 57.904 122.672-177.016 46.032 31.888z"
-                      data-original="#ffffff" />
-              </svg>
 
-              <span class="block sm:inline text-sm mr-3">Update successfully</span>
-
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-3 cursor-pointer shrink-0 fill-white ml-auto"
-                  viewBox="0 0 320.591 320.591">
-                  <path
-                      d="M30.391 318.583a30.37 30.37 0 0 1-21.56-7.288c-11.774-11.844-11.774-30.973 0-42.817L266.643 10.665c12.246-11.459 31.462-10.822 42.921 1.424 10.362 11.074 10.966 28.095 1.414 39.875L51.647 311.295a30.366 30.366 0 0 1-21.256 7.288z"
-                      data-original="#000000" />
-                  <path
-                      d="M287.9 318.583a30.37 30.37 0 0 1-21.257-8.806L8.83 51.963C-2.078 39.225-.595 20.055 12.143 9.146c11.369-9.736 28.136-9.736 39.504 0l259.331 257.813c12.243 11.462 12.876 30.679 1.414 42.922-.456.487-.927.958-1.414 1.414a30.368 30.368 0 0 1-23.078 7.288z"
-                      data-original="#000000" />
-              </svg>
-          </div> -->
-
-    
-<!-- Side Bar -->
  <div class="fixed top-0 left-0 w-[230px] h-[100%] z-50 overflow-hidden sidebar">
     <a href="#" class="logo text-xl font-bold h-[56px] flex items-center text-[#1976D2] z-30 pb-[20px] box-content">
     <i class="fas fa-blog mr-2 m-5"></i>
@@ -278,7 +251,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_submit'])&&isset(
            
             <div class="flex items-center justify-between">
                 <button type="submit" name="edit_submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-700">Add Article</button>
-                <button type="button" id="closeModal" class="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-700">Close</button>
+                <a href="../auteur/createArticle.php" type="button" id="closeModal" class="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-700">Close</a>
             </div>
         </form>
     </div>

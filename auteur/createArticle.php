@@ -5,6 +5,7 @@ session_start();
 
 require_once "../class/class_article.php";
 require_once  "../database/connexion.php";
+require_once "../class/class_category.php";
 
 if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['btn_submit'])) {
     if (isset($_POST['title']) && isset($_POST['description']) && isset($_POST['category'])&& isset($_FILES['avatar'])) {
@@ -36,8 +37,18 @@ if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['btn_submit'])) {
     $id = $_GET['id'];
     $article = new Article();
    $Detail=$article->afficherDetailsArticle($id);
-   var_dump($Detail);
+//    var_dump($Detail);
 }
+
+$categorys = new Category();
+$allcategory = $categorys->afficherCategory();
+
+
+
+  if (!isset($_SESSION['role']) || $_SESSION['role'] === null || $_SESSION['role'] === '') {
+    header('Location: ../login.php');
+    exit;
+  }
 ?>
 
 
@@ -136,10 +147,10 @@ if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['btn_submit'])) {
         <li class="text-[#363949]"><a href="statistic.php">Statistic</a></li>
      </ul>
 </div>
-   <a id="openModal" class="report h-[36px] px-[16px] rounded-[36px] bg-[#1976D2] text-[#f6f6f6] flex items-center justify-center gap-[10px] font-medium">
+   <button id="openModal" class="report h-[36px] px-[16px] rounded-[36px] bg-[#1976D2] text-[#f6f6f6] flex items-center justify-center gap-[10px] font-medium">
    <i class="fa-solid fa-plus"></i>
                     <span>Create Article</span>
-    </a>
+    </button>
  </div>
 
  <ul class="insights grid grid-cols-[repeat(auto-fit,_minmax(240px,_1fr))] gap-[24px] mt-[36px]">
@@ -242,7 +253,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['btn_submit'])) {
  </div>
  
 <!-- Modal Structure -->
-<div id="modal" class="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-50 hidden z-50">
+<div id="modal" class="fixed inset-0 flex justify-center items-center bg-gray-500 hidden bg-opacity-50  z-50">
     <div class="bg-white p-6 rounded-lg w-96">
         <!-- Image Section -->
       
@@ -257,10 +268,13 @@ if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['btn_submit'])) {
             <div class="mb-4">
                 <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
                 <select id="category" name="category" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
-                    <option value="1">Technology</option>
-                    <option value="2">Health</option>
-                    <option value="3">Lifestyle</option>
-                    <option value="4">Business</option>
+                <?php
+            foreach($allcategory as $cate){
+             
+                echo '<option value="' . $cate['CategoryID'] . '">' . $cate['names'] . '</option>';
+              
+            }
+          ?>
                 </select>
             </div>
 

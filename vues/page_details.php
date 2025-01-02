@@ -11,6 +11,10 @@ if (isset($_GET['id'])) {
 }
 
  
+// if (!isset($_SESSION['role']) || $_SESSION['role'] === null || $_SESSION['role'] === '') {
+//     header('Location: ../login.php');
+//     exit;
+//   }
 ?>
 
 

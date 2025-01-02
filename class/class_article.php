@@ -3,7 +3,8 @@
 <?php
 
 
- class Article {
+ class Article 
+ {
   private $title;
   private $content; 
   private $category_id;
@@ -184,14 +185,67 @@ public function removeArticle($id){
     }
 }
 
+public function approvedArticle($id) {
+
+    try {
+        $query = $this->pdo->prepare("UPDATE article SET status ='approved' WHERE id = :id");
+        $query->bindParam(':id', $id, PDO::PARAM_STR);
+        $query->execute();
+
+     
+        if ($query->rowCount() > 0) {
+            // header("Location:../dashorad/category.php");
+            exit(); 
+        } else {
+            return "No rows were updated."; 
+        }
+    } catch (PDOException $e) {
+        return "Erreur : " . $e->getMessage();
+    }
+  
+}
+
+public function afficherArticleAdmin(){
+    try {
+        $query = "SELECT * FROM article
+        JOIN utilisateurs ON article.author_id = utilisateurs.utilisateurID 
+        JOIN category ON article.category_id = category.CategoryID  ";
+
+        $stmt = $this->pdo->prepare($query);
+       
+        $stmt->execute();
+        $article = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $article;
+        
+    } catch (PDOException $e) {
+        echo "Errors: " . $e->getMessage();
+    }
+ }
+
+
+public function CancelArticle($id) {
+
+    try {
+        $query = $this->pdo->prepare("UPDATE article SET status ='rejected' WHERE id = :id");
+        $query->bindParam(':id', $id, PDO::PARAM_STR);
+        $query->execute();
+
+     
+        if ($query->rowCount() > 0) {
+            // header("Location:../dashorad/category.php");
+            exit(); 
+        } else {
+            return "No rows were updated."; 
+        }
+    } catch (PDOException $e) {
+        return "Erreur : " . $e->getMessage();
+    }
+  
+}
+
 
  //  public editArticle();
 //  public annuleArticle();
-
-
-
-
-
 
 
 

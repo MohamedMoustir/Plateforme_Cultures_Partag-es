@@ -3,10 +3,21 @@
 <?php
 require_once "../class/class_article.php";
 require_once  "../database/connexion.php";
+require_once "../class/class_category.php";
+
+
 
  $article = new Article();
  $articleapproved=$article->afficherArticleApproved();
  $pages = $article->pages;
+
+
+
+
+//  if (!isset($_SESSION['role']) || $_SESSION['role'] === null || $_SESSION['role'] === '') {
+//     header('Location: ../login.php');
+//     exit;
+//   }
 ?>
 
 <!DOCTYPE html>
@@ -181,62 +192,66 @@ require_once  "../database/connexion.php";
                
 
                 <div class="tab-content">
-    <div id="tab-1" class="tab-pane fade show p-0 active">
-        <div class="row g-4">
-            <?php foreach($articleapproved as $article ): ?>
-                <div class="col-lg-4 col-md-2 wow fadeInUp" data-wow-delay="0.3s">
-                    <div class="property-item rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 bg-white">
-                        <!-- Image Section -->
-                        <div class="relative overflow-hidden">
-                            <a href="#">
-                                <img class="img-fluid w-full h-64 object-cover transition-transform duration-300 transform hover:scale-110"
-                                     src="<?= $article['image'] ?>" alt="Property Image">
-                            </a>
-                            <div class="absolute top-4 left-4 bg-teal-500 text-white text-xs font-medium py-1 px-3 rounded-lg shadow-md">
-                                <?= $article['title']; ?>
-                            </div>
-                            <div class="absolute bottom-4 left-4 bg-white text-teal-500 text-xs font-medium py-1 px-3 rounded-lg shadow-md">
-                                <?= $article['names']; ?>
-                            </div>
+                <div id="tab-1" class="tab-pane fade show p-0 active">
+    <div class="row g-4">
+        <?php foreach ($articleapproved as $article): ?>
+            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                <div class="property-item rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 bg-white">
+                    <div class="relative overflow-hidden">
+                        <a href="#">
+                            <img class="img-fluid w-full h-64 object-cover transition-transform duration-300 transform hover:scale-110"
+                                 src="<?= htmlspecialchars($article['image']); ?>" alt="Property Image">
+                        </a>
+                        <div class="absolute top-4 left-4 bg-teal-500 text-white text-xs font-medium py-1 px-3 rounded-lg shadow-md">
+                            <?= htmlspecialchars($article['title']); ?>
                         </div>
-
-                        <!-- Property Info Section -->
-                        <div class="p-4 ">
-                        <div class="flex items-center space-x-3">
-    <!-- Circular Icon with Border -->
-    <div class="flex items-center justify-center w-10 h-10 border-2 border-teal-500 rounded-full">
-        <i class="fa-solid fa-user text-teal-500 text-lg"></i>
-    </div>
-
-    <!-- Small Name Text -->
-    <h5 class="text-teal-700 text-sm font-medium">
-        <?= $article['name']; ?>
-    </h5>
-</div>
-
-                          <a href="#"
-                               class="text-gray-800 text-lg font-semibold hover:text-teal-500 transition-colors duration-200 block">
-                               <?= $article['content']; ?>
-                            </a>
-                            <p class="text-gray-600 text-sm mt-2 flex items-center">
-                                <i class="fa fa-calendar-alt text-teal-500 mr-2"></i>
-                                <?= "Publié le " . $article['created_at']; ?>
-                            </p>
-                        </div>
-
-                        <!-- Read More Button -->
-                        <div class="flex justify-between items-center p-4 border-t border-gray-200 bg-gray-50">
-                            <a href="../vues/page_details.php?id=<?=$article['id']; ?>" class="text-teal-500 hover:text-teal-700 text-sm font-semibold hover:underline transition-all duration-300">
-                                Lire la suite
-                            </a>
+                        <div class="absolute bottom-4 left-4 bg-white text-teal-500 text-xs font-medium py-1 px-3 rounded-lg shadow-md">
+                            <?= htmlspecialchars($article['names']); ?>
                         </div>
                     </div>
-                </div>
-            <?php endforeach; ?>
-        </div>
+
+                    <div class="p-4">
+                        <div class="flex items-center space-x-3 mb-3">
+                            <div class="flex items-center justify-center w-10 h-10 border-2 border-teal-500 rounded-full">
+                                <i class="fa-solid fa-user text-teal-500 text-lg"></i>
+                            </div>
+                            <h5 class="text-teal-700 text-sm font-medium">
+                                <?= htmlspecialchars($article['name']); ?>
+                            </h5>
+                        </div>
+                        <a href="#"
+                           class="text-gray-800 text-lg font-semibold hover:text-teal-500 transition-colors duration-200 block">
+                           <?= htmlspecialchars($article['content']); ?>
+                        </a>
+                        <p class="text-gray-600 text-sm mt-2 flex items-center">
+                            <i class="fa fa-calendar-alt text-teal-500 mr-2"></i>
+                            <?= "Publié le " . date("d M Y", strtotime($article['created_at'])); ?>
+                        </p>
+
+                        <div class="flex justify-between items-center text-gray-500 text-sm mt-3">
+    <div class="flex items-center space-x-2">
+        <i class="fa-solid fa-eye"></i>
+        <span>4 vues</span>
+    </div>
+    <div class="flex items-center space-x-2">
+        <i class="fa-solid fa-comments"></i>
+        <span>2 commentaires</span>
     </div>
 </div>
 
+                    </div>
+
+                    <div class="flex justify-between items-center p-4 border-t border-gray-200 bg-gray-50">
+                        <a href="../vues/page_details.php?id=<?= $article['id']; ?>" target="_blank" 
+                           class="text-teal-500 hover:text-teal-700 text-sm font-semibold hover:underline transition-all duration-300">
+                            Lire la suite
+                        </a>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
 
                     
                     <ul class="flex mt-8 space-x-5 justify-center font-[sans-serif]">
