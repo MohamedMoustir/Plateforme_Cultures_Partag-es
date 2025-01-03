@@ -11,6 +11,7 @@ require_once "../class/class_category.php";
  $articleapproved=$article->afficherArticleApproved();
  $pages = $article->pages;
 
+ 
 
 
 
@@ -18,6 +19,7 @@ require_once "../class/class_category.php";
 //     header('Location: ../login.php');
 //     exit;
 //   }
+
 ?>
 
 <!DOCTYPE html>
@@ -287,9 +289,7 @@ require_once "../class/class_category.php";
                 </div>
             </div>
         </div>
-        <!-- Property List End -->
-
-
+    
         <!-- Call to Action Start -->
         <div class="container-xxl py-5">
             <div class="container">
