@@ -175,10 +175,9 @@ public function removeArticle($id){
         $sql = "DELETE FROM article WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':id', $id);
-        return $stmt->execute();
+         $stmt->execute();
         if ($stmt) {
-            header('location:../auteur/createArticle.php');
-            exit();
+            echo "<script>window.location.href = '../auteur/createArticle.php';</script>";
         }
     } catch (PDOException $e) {
         return "Erreur : " . $e->getMessage();
@@ -194,8 +193,9 @@ public function approvedArticle($id) {
 
      
         if ($query->rowCount() > 0) {
-            // header("Location:../dashorad/category.php");
-            exit(); 
+            echo "<script>window.location.href = 'category.php';</script>";
+
+            exit; 
         } else {
             return "No rows were updated."; 
         }
@@ -226,14 +226,15 @@ public function afficherArticleAdmin(){
 public function CancelArticle($id) {
 
     try {
+      
         $query = $this->pdo->prepare("UPDATE article SET status ='rejected' WHERE id = :id");
         $query->bindParam(':id', $id, PDO::PARAM_STR);
         $query->execute();
 
      
         if ($query->rowCount() > 0) {
-            // header("Location:../dashorad/category.php");
-            exit(); 
+            echo "<script>window.location.href = 'category.php';</script>";
+            exit; 
         } else {
             return "No rows were updated."; 
         }
