@@ -4,6 +4,7 @@
 require_once "../class/class_article.php";
 require_once  "../database/connexion.php";
 require_once "../class/class_category.php";
+require_once "../class/class_likes";
 
 
 
@@ -213,7 +214,12 @@ require_once "../class/class_category.php";
                 <div class="tab-content">
                 <div id="tab-1" class="tab-pane fade show p-0 active">
     <div class="row g-4">
-        <?php foreach ($articleapproved as $article): ?>
+        <?php foreach ($articleapproved as $article): 
+            
+$like = new likes();
+$id_article = $article['id'];
+$likeExists = $like->Getlike($id_article);
+            ?>
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
                 <div class="property-item rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 bg-white">
                     <div class="relative overflow-hidden">
@@ -250,7 +256,7 @@ require_once "../class/class_category.php";
                         <div class="flex justify-between items-center text-gray-500 text-sm mt-3">
     <div class="flex items-center space-x-2">
         <i class="fa-solid fa-eye"></i>
-        <span>4 vues</span>
+        <span><?= $likeExists ?> vues</span>
     </div>
     <div class="flex items-center space-x-2">
         <i class="fa-solid fa-comments"></i>
