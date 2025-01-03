@@ -18,7 +18,12 @@ public function Selectutilisateurs(){
         $stmt = $this->pdo->prepare($stmt);
         $stmt->execute();
         $user = $stmt->fetchall(PDO::FETCH_OBJ);
-     return $user;
+        if ($user) {
+         
+      return $user;
+        }
+ 
+
       }catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
       }
@@ -32,9 +37,25 @@ public function Selectutilisateurs(){
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
+            if ($stmt) {
+                echo "<script>window.location.href = 'users.php';</script>";
+            }
         } catch (PDOException $e) {
             echo "Errors: " . $e->getMessage();
         }
     }
     
+    public function activeUsers($id){
+        try {
+            $sql = "UPDATE utilisateurs SET archived = 0 WHERE utilisateurID = :id";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            if ($stmt) {
+                echo "<script>window.location.href = 'users.php';</script>";
+            }
+        } catch (PDOException $e) {
+            echo "Errors: " . $e->getMessage();
+        }
+    }
 }
