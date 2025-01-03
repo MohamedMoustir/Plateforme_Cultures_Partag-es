@@ -5,6 +5,8 @@ session_start();
 
 require_once "../class/class_article.php";
 require_once  "../database/connexion.php";
+require_once  "../class/class_category.php";
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_submit'])&&isset($_GET['id_article'])) {
     $title = $_POST['title'];
@@ -26,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_submit'])&&isset(
             $upload_img = "../upload/" . $unique_image;
             move_uploaded_file($file_temp, $upload_img);
         } else {
-            echo "امتداد الصورة غير مسموح.";
+            echo "";
             exit;
         }
     }
@@ -40,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_submit'])&&isset(
     }
 }
 
-//  var_dump($title,$content,$category_id,$author_id,$image_path);
+
   $article = new Article();
   $email = $_SESSION['email'];
   $articles=$article->afficherArticle($email);
@@ -51,6 +53,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_submit'])&&isset(
    $Detail=$article->afficherDetailsArticle($id);
   
 }
+
+
+
+$categorys = new Category();
+$allcategory = $categorys->afficherCategory();
+
+
 
 
   if (!isset($_SESSION['role']) || $_SESSION['role'] === null || $_SESSION['role'] === '') {
@@ -232,9 +241,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_submit'])&&isset(
                 <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
                 <select value="<?= $Detail['category_id'] ?>" id="category" name="category" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
                     <option value="1">Technology</option>
-                    <option value="2">Health</option>
-                    <option value="3">Lifestyle</option>
-                    <option value="4">Business</option>
+                    <?php foreach($allcategory as $cate){
+             
+             echo '<option value="' . $cate['CategoryID'] . '">' . $cate['names'] . '</option>';
+           
+         }
+       ?>
                 </select>
             </div>
 
