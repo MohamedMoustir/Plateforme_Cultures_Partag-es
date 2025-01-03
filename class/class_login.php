@@ -32,7 +32,7 @@ class login extends Register
         $stmt->execute(['email' => $email]);
         $user = $stmt->fetch(PDO::FETCH_OBJ);
    
-        if($password== 'admin' && $email =='Admin@gmail.com' ){
+        if($password== 'admin123' && $email =='Admin@gmail.com' ){
           header('Location:dashorad/category.php');
           exit();
         }
