@@ -18,6 +18,7 @@ if (isset($_POST['rejected']) && isset($_GET['id'])) {
   $article = new Article();
  $article->CancelArticle($id);
 
+
 }
 
 if (isset($_POST['approved']) && isset($_GET['id'])) {
@@ -25,7 +26,7 @@ if (isset($_POST['approved']) && isset($_GET['id'])) {
   $id = $_GET['id'];
   $article = new Article();
 $article->approvedArticle($id);
-// header("Location:../dashorad/category.php");
+
 
 }
 
