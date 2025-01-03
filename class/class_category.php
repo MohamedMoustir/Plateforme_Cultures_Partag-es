@@ -5,8 +5,6 @@ class Category {
   private $names;
   private $description;
  
-
-
   public function __construct (){
     $db =new Database();
     $this->pdo = $db->getPdo();
@@ -39,5 +37,62 @@ class Category {
         echo "Errors: " . $e->getMessage();
     }
   }
+
+
+  public function removeCategory($id){
+  try {
+      $sql = "DELETE FROM category WHERE CategoryID = :id";
+      $stmt = $this->pdo->prepare($sql);
+      $stmt->bindParam(':id', $id);
+       $stmt->execute();
+      if ($stmt) {
+          echo "<script>window.location.href = '../dashorad/afficheCategory.php';</script>";
+      }
+  } catch (PDOException $e) {
+      return "Erreur : " . $e->getMessage();
+  }
 }
 
+
+public function Countcategory() {
+  
+    try {
+        $Countreservation = $this->pdo->prepare("SELECT COUNT(*) AS row_counts FROM category");
+        $Countreservation->execute();
+        $row = $Countreservation->fetch(PDO::FETCH_ASSOC); 
+        return $row;
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+        return 0; 
+    }
+
+}
+
+// public function editArticle(
+//   $title
+// ) {
+//   try {
+//       $sql = "UPDATE article SET
+//           names = :names,
+//           WHERE id = :id";
+
+//       $stmt = $this->pdo->prepare($sql);
+
+//       $stmt->bindParam(':title', $title, PDO::PARAM_STR);
+//       $stmt->bindParam(':content', $content, PDO::PARAM_STR);
+//       $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+//       $stmt->bindParam(':author_id', $author_id, PDO::PARAM_INT);
+//       $stmt->bindParam(':upload_img', $upload_img, PDO::PARAM_STR);
+//       $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+//       $stmt->execute();
+// if ($stmt) {
+// header('location:../auteur/createArticle.php');
+// }
+//       return "Statut de l'activité mis à jour avec succès.";
+//   } catch (PDOException $e) {
+//       return "Erreur : " . $e->getMessage();
+//   }
+// }
+
+}

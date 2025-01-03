@@ -60,8 +60,6 @@ $categorys = new Category();
 $allcategory = $categorys->afficherCategory();
 
 
-
-
   if (!isset($_SESSION['role']) || $_SESSION['role'] === null || $_SESSION['role'] === '') {
     header('Location: ../login.php');
     exit;

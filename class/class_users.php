@@ -57,5 +57,37 @@ public function Selectutilisateurs(){
         } catch (PDOException $e) {
             echo "Errors: " . $e->getMessage();
         }
+    
     }
+
+
+
+
+    public function UsersCount() {
+        try {
+            $Countreservation = $this->pdo->prepare("SELECT COUNT(*) AS row_counts FROM utilisateurs");
+            $Countreservation->execute();
+            $row = $Countreservation->fetch(PDO::FETCH_ASSOC); 
+            return $row;
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return 0; 
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

@@ -1,0 +1,30 @@
+
+<?php 
+
+
+class likes 
+{
+
+    private $user_id ;
+    private $content_id ;
+    public $pdo;
+
+    public function __construct (){
+        $db =new Database();
+        $this->pdo = $db->getPdo();
+       }
+       public function addlikes($user_id, $content_id) {
+        try {
+            $query = "INSERT INTO `likes` (user_id, content_id) VALUES (:user_id, :content_id)";
+            $stmt = $this->pdo->prepare($query);
+    
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT); 
+            $stmt->bindParam(':content_id', $content_id, PDO::PARAM_INT); 
+    
+            $stmt->execute();
+        } catch (PDOException $e) {
+            
+            echo "Error: " . $e->getMessage();
+        }
+    }
+}

@@ -2,6 +2,9 @@
 <?php
 require_once "../class/class_category.php";
 require_once  "../database/connexion.php";
+require_once "../class/class_article.php";
+require_once "../class/class_users.php";
+
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -22,6 +25,14 @@ $categorys = new Category();
 //   header('Location: ../login.php');
 //   exit;
 // }
+
+$article = new Article();
+$articles=$article->ArticleCount();
+
+$users = new utilisateurs();
+$user=$users->UsersCount();
+
+$category =$categorys->Countcategory();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -275,7 +286,7 @@ $categorys = new Category();
             </a>
           </li>
           <li>
-            <a class="" href="">
+            <a class="" href="../dashorad/afficheCategory.php">
               <button
                 class="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize"
                 type="button">
@@ -405,7 +416,7 @@ $categorys = new Category();
 
               <h4
                 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-              300
+         <?= $category['row_counts']; ?>
             </div>
             <div class="border-t border-blue-gray-50 p-4">
               <p class="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
@@ -428,7 +439,7 @@ $categorys = new Category();
               </p>
               <h4
                 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-           20
+                <?= $user['row_counts']; ?>
               </h4>
             </div>
             <div class="border-t border-blue-gray-50 p-4">
@@ -454,10 +465,11 @@ $categorys = new Category();
               </svg>
             </div>
             <div class="p-4 text-right">
-              <p class="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Total activite</p>
+              <p class="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Total Article</p>
               <h4
                 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-           100
+                <?= $articles['row_count']; ?>
+
                 </h4>
             </div>
             <div class="border-t border-blue-gray-50 p-4">

@@ -1,13 +1,13 @@
 <?php  
-
+session_start();
 require_once "../class/class_article.php";
 require_once  "../database/connexion.php";
-
+require_once "../class/class_likes";
 if (isset($_GET['id'])) { 
     $id = $_GET['id'];
     $article = new Article();
    $Detail=$article->afficherDetailsArticle($id);
-   var_dump($Detail);
+ 
 }
 
  
@@ -15,6 +15,16 @@ if (isset($_GET['id'])) {
 //     header('Location: ../login.php');
 //     exit;
 //   }
+
+if (isset($_POST['like'])) {
+    $id_user = $_SESSION['id_users'];
+    $id_article = $_GET['id'];
+    $like = new likes();
+    $like->addlikes($id_user, $id_article);
+    header('location:index.php');
+}
+
+
 
 ?>
 
@@ -188,12 +198,12 @@ if (isset($_GET['id'])) {
                 <?= $Detail['created_at']; ?>
             </p>
 
-            <div class="flex justify-between items-center mt-4">
-                <button class="flex items-center text-teal-500 hover:bg-teal-500 hover:text-white px-4 py-2 rounded-lg transition">
+            <form method="POST"  class="flex justify-between items-center mt-4">
+                <button type="submit" name="like" class="flex items-center text-teal-500 hover:bg-teal-500 hover:text-white px-4 py-2 rounded-lg transition">
                     <i class="fa-solid fa-thumbs-up mr-2"></i> J’aime
                 </button>
                 <span class="text-gray-500 text-sm">50 J’aimes</span>
-            </div>
+            </form>
 
             <div class="mt-6">
                 <h4 class="text-lg font-semibold text-teal-700 mb-2">Ajouter un commentaire :</h4>

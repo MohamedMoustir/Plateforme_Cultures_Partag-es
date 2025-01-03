@@ -49,13 +49,9 @@ $allcategory = $categorys->afficherCategory();
 //     header('Location: ../login.php');
 //     exit;
 //   }
+
+
 ?>
-
-
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -176,7 +172,7 @@ $allcategory = $categorys->afficherCategory();
     <tbody>
     <?php foreach ($articles as $article): ?>
     <?php 
-        // Gérer l'état des icônes et de l'affichage
+ 
         if ($article['status'] == 'pending') {
             $type = 'hidden'; 
             $types = 'block';

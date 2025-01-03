@@ -72,41 +72,65 @@
     }
  }
 
- public function afficherArticleApproved(){
+ public function afficherArticleApproved() {
     try {
         $starts = 0;
         $rows_pre_page = 6;
 
+     
         $recordQuery = "SELECT COUNT(*) FROM article
                         JOIN utilisateurs ON article.author_id = utilisateurs.utilisateurID
                         WHERE article.status = 'approved'";
+        
+        $filterQuery = "";
+        if (isset($_GET['category']) && !empty($_GET['category'])) {
+            $filterQuery = " AND article.category_id = :category_id";
+        }
+        if (isset($_GET['category']) && empty($_GET['category'])) { 
+                header('Location: ../vues/index.php?page-nr=1');
+                        
+        }
+
+        $recordQuery .= $filterQuery;
+
         $stmt = $this->pdo->prepare($recordQuery);
+
+        if (!empty($filterQuery)) {
+            $stmt->bindParam(':category_id', $_GET['category'], PDO::PARAM_INT);
+        }
+
         $stmt->execute();
-        $record = $stmt->fetchColumn();  
+        $record = $stmt->fetchColumn();
         $this->pages = ceil($record / $rows_pre_page);
-       $page = 0; 
+
+        $page = 0;
 
         if (isset($_GET['page-nr'])) {
             $page = intval($_GET['page-nr']) - 1;
             $starts = $page * $rows_pre_page;
         }
 
+   
         $query = "SELECT * FROM article
-        JOIN utilisateurs ON article.author_id = utilisateurs.utilisateurID 
-        JOIN category ON article.category_id = category.CategoryID 
-                  WHERE article.status = 'approved'
-                  ORDER by article.id desc
+                  JOIN utilisateurs ON article.author_id = utilisateurs.utilisateurID 
+                  JOIN category ON article.category_id = category.CategoryID 
+                  WHERE article.status = 'approved' " . $filterQuery . "
+                  ORDER BY article.id DESC
                   LIMIT :starts, :rows_pre_page";
 
         $stmt = $this->pdo->prepare($query);
-        $stmt->bindParam(':starts', $starts, PDO::PARAM_INT);  
+        $stmt->bindParam(':starts', $starts, PDO::PARAM_INT);
         $stmt->bindParam(':rows_pre_page', $rows_pre_page, PDO::PARAM_INT);
+
+        if (!empty($filterQuery)) {
+            $stmt->bindParam(':category_id', $_GET['category'], PDO::PARAM_INT);
+        }
+
         $stmt->execute();
-      
         $articleapproved = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $articleapproved;
-        
-       echo  $pages;
+
+        echo $pages;
     } catch (PDOException $e) {
         echo "Errors: " . $e->getMessage();
     }
@@ -243,6 +267,22 @@ public function CancelArticle($id) {
     }
   
 }
+
+
+// statictick
+
+public function ArticleCount() {
+    try {
+        $Countreservation = $this->pdo->prepare("SELECT COUNT(*) AS row_count FROM article");
+        $Countreservation->execute();
+        $row = $Countreservation->fetch(PDO::FETCH_ASSOC); 
+        return $row;
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+        return 0; 
+    }
+}
+
 
 
  //  public editArticle();
