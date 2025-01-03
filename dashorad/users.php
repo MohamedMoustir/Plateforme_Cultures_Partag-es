@@ -16,6 +16,12 @@ require_once "../class/class_users.php";
   
   }
   
+  if (isset($_POST['Active']) && isset($_GET['id'])) {
+    $id = $_GET['id'];
+    $article = new utilisateurs();
+   $article->activeUsers($id);
+  
+  }
   
 //   if (!isset($_SESSION['role']) || $_SESSION['role'] === null || $_SESSION['role'] === '') {
 //     header('Location: ../login.php');
@@ -46,10 +52,12 @@ require_once "../class/class_users.php";
                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Inactive</span>
                         </td>   <?php }?>
                         <?php  if ($user->archived == 0) {?>
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">this</span>
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
                         </td>   <?php }?>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <button type="submit" name="archived" class="ml-2 px-4 py-2 font-medium text-white bg-red-600 rounded-md hover:bg-red-500 focus:outline-none focus:shadow-outline-red active:bg-red-600 transition duration-150 ease-in-out">Delete</button>
+                            <button type="submit" name="archived" class="ml-2 px-4 py-2 font-medium text-white bg-red-600 rounded-md hover:bg-red-500 focus:outline-none focus:shadow-outline-red active:bg-red-600 transition duration-150 ease-in-out">archive</button>
+                            <button type="submit" name="Active" class="ml-2 px-4 py-2 font-medium text-white bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:shadow-outline-red active:bg-red-600 transition duration-150 ease-in-out">Active</button>
+
                         </td>
                     </tr>
                 </form>
