@@ -30,6 +30,8 @@ $categorys = new Category();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
 
   <title>Document</title>
 </head>
@@ -291,10 +293,11 @@ $categorys = new Category();
           </li>
         </ul>
         <ul class="mb-4 flex flex-col gap-1">
-          <li class="mx-3.5 mt-4 mb-2">
-            <p class="block antialiased font-sans text-sm leading-normal text-white font-black uppercase opacity-75">
-              auth pages</p>
-          </li>
+        <a href="../login.php?logout" class="flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-lg shadow-md hover:bg-blue-700 transition duration-200">
+  <i class="fas fa-sign-out-alt mr-2"></i> Log Out
+</a>
+
+
 
         </ul>
       </div>
