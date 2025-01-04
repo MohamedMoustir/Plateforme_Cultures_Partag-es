@@ -283,6 +283,25 @@ public function ArticleCount() {
     }
 }
 
+public function ArticleCountAuteur($email) {
+    try {
+        $Countreservation = $this->pdo->prepare("SELECT COUNT(*) as count FROM article
+        JOIN utilisateurs ON article.author_id = utilisateurs.utilisateurID 
+        JOIN category ON article.category_id = category.CategoryID 
+        WHERE utilisateurs.email = :email");
+        $Countreservation->bindParam(':email', $email, PDO::PARAM_STR);
+        $Countreservation->execute();
+        $row = $Countreservation->fetch(PDO::FETCH_ASSOC);
+        
+        return $row['count']; 
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+        return 0;
+    }
+}
+
+
+
 
 
  //  public editArticle();

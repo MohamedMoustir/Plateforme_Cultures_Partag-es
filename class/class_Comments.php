@@ -59,5 +59,24 @@ class Comments
                 echo "Error: " . $e->getMessage();
             }
           }
+
+
+          public function totalCommentParauteur($id){
+            try {
+                $stmt = " SELECT  COUNT(*) FROM comments 
+            JOIN article on comments.article_id = article.id
+            JOIN utilisateurs ON comments.user_id= utilisateurs.utilisateurID 
+            WHERE article.author_id  = :id";
+                    $stmt = $this->pdo->prepare($stmt);
+                    $stmt->bindParam(':id', $id, PDO::PARAM_INT); 
+                    $stmt->execute();
+                    $likeExists = $stmt->fetchColumn(); 
+                return $likeExists; 
+            } catch (PDOException $e) {
+                echo "Error: " . $e->getMessage();
+            }
+          }
+
+
 }
 

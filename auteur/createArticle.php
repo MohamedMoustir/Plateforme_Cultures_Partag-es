@@ -6,8 +6,11 @@ session_start();
 require_once "../class/class_article.php";
 require_once  "../database/connexion.php";
 require_once "../class/class_category.php";
+require_once "../class/class_likes.php";
+require_once "../class/class_Comments.php";
 
-if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['btn_submit'])) {
+
+if ( $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btn_submit'])) {
     if (isset($_POST['title']) && isset($_POST['description']) && isset($_POST['category'])&& isset($_FILES['avatar'])) {
 
          $title = $_POST['title'] ;
@@ -26,6 +29,8 @@ if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['btn_submit'])) {
   $email = $_SESSION['email'];
   $articles=$article->afficherArticle($email);
 
+//   
+   $ArticleCountAuteur = $article->ArticleCountAuteur($email);
 
 
   if (isset($_GET['remove'])) {
@@ -50,7 +55,12 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] === '' || $_SESSION['role'] =
     exit;
   }
 
+  $id = $_SESSION['id_users'];
+  $like = new likes();
+ $totalLike=$like->totalLikeParauteur($id);
 
+ $Comments = new Comments();
+ $totalComments = $Comments->totalCommentParauteur($id);
 ?>
 
 <!DOCTYPE html>
@@ -134,20 +144,20 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] === '' || $_SESSION['role'] =
                 <li>
                  <i class="fa-solid fa-user-group"></i>
                     <span class="info">
-                        <h3>10</h3>
-                        <p>Clients</p>
+                        <h3><?= $totalLike; ?></h3>
+                        <p>likes</p>
                     </span>
                 </li>
                 <li><i class="fa-solid fas fa-blog "></i>
                     <span class="info">
-                        <h3>50</h3> 
+                        <h3><?= $ArticleCountAuteur; ?></h3> 
                         <p>Article</p>
                     </span>
                 </li>
                 <li><i class="fa-solid fa-file-signature"></i>
                     <span class="info">
-                        <h3>20</h3>
-                        <p>Contrats</p>
+                        <h3><?=$totalComments?></h3>
+                        <p>Comments</p>
                     </span>
                 </li>
  </ul>

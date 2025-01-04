@@ -65,7 +65,7 @@ public function Selectutilisateurs(){
 
     public function UsersCount() {
         try {
-            $Countreservation = $this->pdo->prepare("SELECT COUNT(*) AS row_counts FROM utilisateurs");
+            $Countreservation = $this->pdo->prepare("SELECT COUNT(*) AS row_counts FROM utilisateurs where archived = 0");
             $Countreservation->execute();
             $row = $Countreservation->fetch(PDO::FETCH_ASSOC); 
             return $row;

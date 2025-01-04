@@ -53,6 +53,23 @@ class likes
         echo "Error: " . $e->getMessage();
     }
   }
-
   
+
+ public function totalLikeParauteur($id){
+    try {
+        $stmt = " SELECT  COUNT(*) FROM likes 
+    JOIN article on likes.content_id = article.id
+    JOIN utilisateurs ON likes.user_id = utilisateurs.utilisateurID 
+    WHERE article.author_id = :id";
+            $stmt = $this->pdo->prepare($stmt);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT); 
+            $stmt->execute();
+            $likeExists = $stmt->fetchColumn(); 
+        return $likeExists; 
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+  }
+  
+ 
 }

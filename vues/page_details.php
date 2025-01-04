@@ -2,7 +2,7 @@
 session_start();
 require_once "../class/class_article.php";
 require_once  "../database/connexion.php";
-require_once "../class/class_likes";
+require_once "../class/class_likes.php";
 require_once "../class/class_Comments.php";
 
 if (isset($_GET['id'])) { 
@@ -38,6 +38,10 @@ if (isset($_POST['comment'])|| isset($_POST['comment_text'])) {
 $id_article = $_GET['id'];
  $allcomment =$comment->SelectComment($id_article);
  
+ if (!isset($_SESSION['role']) || $_SESSION['role'] === '' || $_SESSION['role'] !== 'user') {
+  header('Location: ../login.php');
+  exit;
+}
 
 
 ?>
