@@ -6,6 +6,7 @@ require_once "../class/class_article.php";
 require_once  "../database/connexion.php";
 require_once "../class/class_category.php";
 require_once "../class/class_likes";
+require_once "../class/class_Comments.php";
 
 
 
@@ -221,62 +222,77 @@ echo $_SESSION['role'];
 $like = new likes();
 $id_article = $article['id'];
 $likeExists = $like->Getlike($id_article);
+
+$Comments = new Comments();
+$id_article = $article['id'];
+$CommitExists = $Comments->CountCommit($id_article);
             ?>
-            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                <div class="property-item rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 bg-white">
-                    <div class="relative overflow-hidden">
-                    <a href="#">
-    <img class="w-full h-64 object-cover transition-transform duration-300 transform hover:scale-110"
-         src="<?= htmlspecialchars($article['image']); ?>" alt="Property Image">
-</a>
+          <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+    <div class="property-item rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 bg-white">
+        <div class="relative overflow-hidden">
+            <a href="#">
+                <img class="w-full h-64 object-cover transition-transform duration-300 transform hover:scale-110"
+                     src="<?= htmlspecialchars($article['image']); ?>" alt="Property Image">
+            </a>
 
-                        <div class="absolute top-4 left-4 bg-teal-500 text-white text-xs font-medium py-1 px-3 rounded-lg shadow-md">
-                            <?= htmlspecialchars($article['title']); ?>
-                        </div>
-                        <div class="absolute bottom-4 left-4 bg-white text-teal-500 text-xs font-medium py-1 px-3 rounded-lg shadow-md">
-                            <?= htmlspecialchars($article['names']); ?>
-                        </div>
-                    </div>
+            <div class="absolute top-4 left-4 bg-teal-500 text-white text-xs font-medium py-1 px-3 rounded-lg shadow-md">
+                <?= htmlspecialchars($article['title']); ?>
+            </div>
+            <div class="absolute bottom-4 left-4 bg-white text-teal-500 text-xs font-medium py-1 px-3 rounded-lg shadow-md">
+                <?= htmlspecialchars($article['names']); ?>
+            </div>
+        </div>
 
-                    <div class="p-4">
-                        <div class="flex items-center space-x-3 mb-3">
-                            <div class="flex items-center justify-center w-10 h-10 border-2 border-teal-500 rounded-full">
-                                <i class="fa-solid fa-user text-teal-500 text-lg"></i>
-                            </div>
-                            <h5 class="text-teal-700 text-sm font-medium">
-                                <?= htmlspecialchars($article['name']); ?>
-                            </h5>
-                        </div>
-                        <a href="#"
-                           class="text-gray-800 text-lg font-semibold hover:text-teal-500 transition-colors duration-200 block">
-                           <?= htmlspecialchars($article['content']); ?>
-                        </a>
-                        <p class="text-gray-600 text-sm mt-2 flex items-center">
-                            <i class="fa fa-calendar-alt text-teal-500 mr-2"></i>
-                            <?= "Publié le " . date("d M Y", strtotime($article['created_at'])); ?>
-                        </p>
+        <div class="p-4">
+            <div class="flex items-center space-x-3 mb-3">
+                <div class="flex items-center justify-center w-10 h-10 border-2 border-teal-500 rounded-full">
+                    <i class="fa-solid fa-user text-teal-500 text-lg"></i>
+                </div>
+                <h5 class="text-teal-700 text-sm font-medium">
+                    <?= htmlspecialchars($article['name']); ?>
+                </h5>
+            </div>
+            <a href="#"
+               class="text-gray-800 text-lg font-semibold hover:text-teal-500 transition-colors duration-200 block">
+               <?= htmlspecialchars($article['content']); ?>
+            </a>
+            <p class="text-gray-600 text-sm mt-2 flex items-center">
+                <i class="fa fa-calendar-alt text-teal-500 mr-2"></i>
+                <?= "Publié le " . date("d M Y", strtotime($article['created_at'])); ?>
+            </p>
 
-                        <div class="flex justify-between items-center text-gray-500 text-sm mt-3">
-    <div class="flex items-center space-x-2">
-        <i class="fa-solid fa-eye"></i>
-        <span><?= $likeExists ?> vues</span>
-    </div>
-    <div class="flex items-center space-x-2">
-        <i class="fa-solid fa-comments"></i>
-        <span>2 commentaires</span>
+            <div class="flex items-center mt-3">
+                <span class="text-yellow-500">
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star-half-alt"></i>
+                    <i class="fa-regular fa-star"></i>
+                </span>
+                <span class="ml-2 text-gray-500 text-sm">(4.5)</span>
+            </div>
+
+            <div class="flex justify-between items-center text-gray-500 text-sm mt-3">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-thumbs-up text-teal-500"></i>
+                    <span class=""><?= $likeExists ?> J’aime</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-comments"></i>
+                    <span><?= $CommitExists ?> commentaires</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-between items-center p-4 border-t border-gray-200 bg-gray-50">
+            <a href="../vues/page_details.php?id=<?= $article['id']; ?>" target="_blank" 
+               class="text-teal-500 hover:text-teal-700 text-sm font-semibold hover:underline transition-all duration-300">
+                Lire la suite
+            </a>
+        </div>
     </div>
 </div>
 
-                    </div>
-
-                    <div class="flex justify-between items-center p-4 border-t border-gray-200 bg-gray-50">
-                        <a href="../vues/page_details.php?id=<?= $article['id']; ?>" target="_blank" 
-                           class="text-teal-500 hover:text-teal-700 text-sm font-semibold hover:underline transition-all duration-300">
-                            Lire la suite
-                        </a>
-                    </div>
-                </div>
-            </div>
         <?php endforeach; ?>
     </div>
 </div>

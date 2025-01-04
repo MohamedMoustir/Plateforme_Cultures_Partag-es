@@ -3,6 +3,8 @@ session_start();
 require_once "../class/class_article.php";
 require_once  "../database/connexion.php";
 require_once "../class/class_likes";
+require_once "../class/class_Comments.php";
+
 if (isset($_GET['id'])) { 
     $id = $_GET['id'];
     $article = new Article();
@@ -22,6 +24,22 @@ if (isset($_POST['like'])) {
 
 $id_article = $_GET['id'];
 $likeExists = $like->Getlike($id_article);
+
+
+$comment = new Comments();
+if (isset($_POST['comment'])|| isset($_POST['comment_text'])) {
+    $id_user = $_SESSION['id_users'];
+    $id_article = $_GET['id'];
+    $comment_text = $_POST['comment_text'];
+    $comment->addComment($id_user, $id_article,$comment_text);
+
+}
+
+$id_article = $_GET['id'];
+ $allcomment =$comment->SelectComment($id_article);
+ 
+
+
 ?>
 
 
@@ -77,9 +95,10 @@ $likeExists = $like->Getlike($id_article);
     <div class="relative flex items-center space-x-4">
         <!-- Button -->
         <form method="POST" class="flex justify-between items-center mt-6">
-                <button type="submit" name="like" class="flex items-center text-teal-500 hover:bg-teal-500 hover:text-white px-6 py-3 rounded-full transition">
-                    <i class="fac fa-solid fa-thumbs-up mr-3"></i><?= $likeExists ?> J’aime
-                </button>
+        <button type="submit" name="like" class="flex items-center text-teal-500 hover:bg-teal-500 hover:text-white px-6 py-3 rounded-full border-2 border-teal-500 hover:border-transparent transition duration-300">
+    <i class="fas fa-thumbs-up mr-3"></i><?= $likeExists ?> J’aime
+</button>
+
             </form>
         
         <!-- Emoji Picker (Hidden by Default) -->
@@ -94,6 +113,16 @@ $likeExists = $like->Getlike($id_article);
 </div>
 
 
+<div class="flex items-center mt-3">
+    <span class="text-yellow-500">
+        <i class="fa-solid fa-star"></i>
+        <i class="fa-solid fa-star"></i>
+        <i class="fa-solid fa-star"></i>
+        <i class="fa-solid fa-star-half-alt"></i>
+        <i class="fa-regular fa-star"></i>
+    </span>
+    <span class="ml-2 text-gray-500 text-sm">(4.5)</span>
+</div>
 
       <!-- Category and Description Section -->
       <div class="mt-12">
@@ -111,7 +140,7 @@ $likeExists = $like->Getlike($id_article);
         <h4 class="text-xl font-semibold text-teal-700 mb-4">Add a Comment:</h4>
         <form method="POST" class="flex flex-col space-y-4">
           <!-- Textarea for Comment -->
-          <textarea name="comment_text" rows="4" class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 mb-4" placeholder="Write your comment here..."></textarea>
+          <input name="comment_text" rows="4" class="w-full h-[100px] p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 mb-4" placeholder="Write your comment here..."></input>
 
           <!-- Submit Button with Icon -->
           <button type="submit" name="comment" class="flex items-center bg-teal-500 text-white px-6 py-3 rounded-lg hover:bg-teal-600 transition">
@@ -124,23 +153,29 @@ $likeExists = $like->Getlike($id_article);
       <div class="mt-8">
         <h4 class="text-xl font-semibold text-teal-700 mb-6">Comments:</h4>
         <div class="space-y-4">
-          <!-- Example Comment -->
-          <div class="border-b border-gray-200 pb-4">
-            <p class="text-gray-800">This plant is beautiful! It looks amazing in my living room.</p>
-            <small class="text-gray-500">
-              <i class="fa fa-user text-teal-500 mr-1"></i>
-              John Doe - January 1, 2025
-            </small>
-          </div>
-          <div class="border-b border-gray-200 pb-4">
-            <p class="text-gray-800">Love the variety of plants offered here. Great selection!</p>
-            <small class="text-gray-500">
-              <i class="fa fa-user text-teal-500 mr-1"></i>
-              Jane Doe - January 1, 2025
-            </small>
-          </div>
+          
+        <?php foreach($allcomment as $comment) : ?>
+<div class="border-b border-gray-200 pb-4 px-6 flex items-start space-x-4">
+
+    <i class="fas fa-user-circle text-4xl text-teal-500"></i>
+
+    <div class="flex-1">
+        <p class="text-gray-800 font-semibold text-lg"><?= $comment->name ?></p>
+        <p class="text-gray-600 text-sm"><?= date("d M Y", strtotime($comment->comment_date)); ?></p>
+
+        <p class="text-gray-800 mt-2" id="comment-text"><?= $comment->comment_text ?></p>
+    </div>
+
+    <div class="ml-4 space-x-2">
+        <button class="text-teal-500 hover:text-teal-700 text-sm font-semibold py-1 px-3 rounded-lg border border-teal-500 hover:bg-teal-50 transition duration-200" onclick="editComment()">Edit</button>
+        <button class="text-red-500 hover:text-red-700 text-sm font-semibold py-1 px-3 rounded-lg border border-red-500 hover:bg-red-50 transition duration-200" onclick="removeComment()">Remove</button>
+    </div>
+</div>
+<?php endforeach ?>
+
         </div>
       </div>
+     
     </div>
   </div>
 
@@ -149,6 +184,9 @@ $likeExists = $like->Getlike($id_article);
     <img src="<?= $Detail['image'] ?>" alt="Leafs" class="w-full h-48 object-cover sm:h-screen sm:w-full rounded-lg shadow-lg">
   </div>
 </div>
+
+
+
 
 
 

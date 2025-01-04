@@ -13,6 +13,7 @@ class likes
         $db =new Database();
         $this->pdo = $db->getPdo();
        }
+       
        public function addlikes($user_id, $content_id) {
         try {
             $stmt = "SELECT COUNT(*) FROM likes WHERE user_id = :user_id AND content_id = :content_id";
