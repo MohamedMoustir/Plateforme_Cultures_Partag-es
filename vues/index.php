@@ -1,6 +1,7 @@
 
 
 <?php
+session_start();
 require_once "../class/class_article.php";
 require_once  "../database/connexion.php";
 require_once "../class/class_category.php";
@@ -25,12 +26,13 @@ require_once "../class/class_likes";
  
  $categorys = new Category();
  $allcategory = $categorys->afficherCategory();
+echo $_SESSION['role'];
 
+ if (!isset($_SESSION['role']) || $_SESSION['role'] === '' || $_SESSION['role'] !== 'user') {
+    header('Location: ../login.php');
+    exit;
+}
 
-//  if (!isset($_SESSION['role']) || $_SESSION['role'] === null || $_SESSION['role'] === '') {
-//     header('Location: ../login.php');
-//     exit;
-//   }
 
 
 
@@ -223,10 +225,11 @@ $likeExists = $like->Getlike($id_article);
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
                 <div class="property-item rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 bg-white">
                     <div class="relative overflow-hidden">
-                        <a href="#">
-                            <img class="img-fluid w-full h-64 object-cover transition-transform duration-300 transform hover:scale-110"
-                                 src="<?= htmlspecialchars($article['image']); ?>" alt="Property Image">
-                        </a>
+                    <a href="#">
+    <img class="w-full h-64 object-cover transition-transform duration-300 transform hover:scale-110"
+         src="<?= htmlspecialchars($article['image']); ?>" alt="Property Image">
+</a>
+
                         <div class="absolute top-4 left-4 bg-teal-500 text-white text-xs font-medium py-1 px-3 rounded-lg shadow-md">
                             <?= htmlspecialchars($article['title']); ?>
                         </div>

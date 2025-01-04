@@ -1,5 +1,6 @@
 
 <?php
+session_start();
 require_once "../class/class_category.php";
 require_once  "../database/connexion.php";
 require_once "../class/class_article.php";
@@ -20,11 +21,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 $categorys = new Category();
  $allcategory = $categorys->afficherCategory();
 
- 
-//  if (!isset($_SESSION['role']) || $_SESSION['role'] === null || $_SESSION['role'] === '') {
-//   header('Location: ../login.php');
-//   exit;
-// }
+
+
+$allowedEmails = ['Admin@gmail.com']; 
+
+
+if (
+    !isset($_SESSION['email'], $_SESSION['role']) || 
+    in_array($_SESSION['email'], $allowedEmails) 
+
+   
+) {
+    header('Location: ../login.php');
+    exit;
+}
+
 
 $article = new Article();
 $articles=$article->ArticleCount();
@@ -33,6 +44,8 @@ $users = new utilisateurs();
 $user=$users->UsersCount();
 
 $category =$categorys->Countcategory();
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -45,10 +45,10 @@ $allcategory = $categorys->afficherCategory();
 
 
 
-//   if (!isset($_SESSION['role']) || $_SESSION['role'] === null || $_SESSION['role'] === '') {
-//     header('Location: ../login.php');
-//     exit;
-//   }
+if (!isset($_SESSION['role']) || $_SESSION['role'] === '' || $_SESSION['role'] == 'user' ) {
+    header('Location: ../login.php');
+    exit;
+  }
 
 
 ?>
