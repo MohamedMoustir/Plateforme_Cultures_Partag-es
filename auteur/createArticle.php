@@ -9,20 +9,22 @@ require_once "../class/class_category.php";
 require_once "../class/class_likes.php";
 require_once "../class/class_Comments.php";
 
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btn_submit'])) {
+    if (isset($_POST['title']) && isset($_POST['description']) && isset($_POST['category']) && isset($_FILES['avatar'])) {
+   
+        $title = $_POST['title'];
+        $content = htmlspecialchars($_POST['description']);
+        $category_id = htmlspecialchars($_POST['category']);
+        $author_id = $_SESSION['id_users'];
+        $image_path = $_FILES['avatar'];
 
-if ( $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btn_submit'])) {
-    if (isset($_POST['title']) && isset($_POST['description']) && isset($_POST['category'])&& isset($_FILES['avatar'])) {
 
-         $title = $_POST['title'] ;
-         $content = htmlspecialchars($_POST['description']) ;
-         $category_id = htmlspecialchars($_POST['category']);
-         $author_id = $_SESSION['id_users'];
-         $image_path = $_FILES['avatar'];
-         $article = new Article();
-        
-   if ($article->createArticle($title,$content,$category_id,$author_id,$image_path)) {
-   } 
-  }
+        $article = new Article();
+        $article->createArticle($title, $content, $category_id, $author_id, $image_path);
+
+        header("Location: ../auteur/createArticle.php?success=true");
+        exit(); 
+    }
 }
 
   $article = new Article();
@@ -120,7 +122,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] === '' || $_SESSION['role'] =
                 <span class="count absolute top-[-6px] right-[-6px] w-[20px] h-[20px] bg-[#D32F2F] text-[#f6f6f6] border-2 border-[#f6f6f9] font-semibold text-[12px] flex items-center justify-center rounded-full ">12</span>
             </a>
             <a href="#" class="profile">
-                <img class="w-[36px] h-[36px] object-cover rounded-full" width="36" height="36" src=".././assets/image/1054-1728555216-removebg-preview.png">
+                <img class="w-[36px] h-[36px] object-cover rounded-full" width="36" height="36" src="../upload/ef47b5d601.jpg">
             </a>
     </nav>
 <!-- end nav -->
@@ -150,13 +152,13 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] === '' || $_SESSION['role'] =
                 </li>
                 <li><i class="fa-solid fas fa-blog "></i>
                     <span class="info">
-                        <h3><?= $ArticleCountAuteur; ?></h3> 
+                        <h3><?= htmlspecialchars($ArticleCountAuteur); ?></h3> 
                         <p>Article</p>
                     </span>
                 </li>
                 <li><i class="fa-solid fa-file-signature"></i>
                     <span class="info">
-                        <h3><?=$totalComments?></h3>
+                        <h3><?=htmlspecialchars($totalComments)?></h3>
                         <p>Comments</p>
                     </span>
                 </li>
@@ -205,19 +207,19 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] === '' || $_SESSION['role'] =
         <td class="py-4 px-3 text-center">
             <img src="<?= $article['image'] ?>" alt="Article Image" class="w-10 h-10 object-cover rounded-full mx-auto">
         </td>
-        <td class="py-4 px-3 text-center"><?= $article['title'] ?></td>
-        <td class="py-4 px-3 text-center"><?= $article['names'] ?></td>
-        <td class="py-4 px-3 text-center"><?= $article['created_at'] ?></td>
+        <td class="py-4 px-3 text-center"><?= htmlspecialchars($article['title']) ?></td>
+        <td class="py-4 px-3 text-center"><?= htmlspecialchars($article['names']) ?></td>
+        <td class="py-4 px-3 text-center"><?= htmlspecialchars($article['created_at']) ?></td>
         <td class="py-4 px-3 text-center space-x-4">
-            <a href="../auteur/editeArticle.php?id_article=<?= $article['id'] ?>" class="edit-btn">
+            <a href="../auteur/editeArticle.php?id_article=<?= htmlspecialchars($article['id']) ?>" class="edit-btn">
                 <i class='bx bx-edit-alt text-blue-500'></i>
             </a>
             
-            <a href="../auteur/createArticle.php?remove=<?= $article['id'] ?>">
+            <a href="../auteur/createArticle.php?remove=<?= htmlspecialchars($article['id']) ?>">
                 <i class="bx bx-x-circle text-red-600 text-2xl" title="Annulé"></i>
             </a>
 
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-10 animate-[spin_0.8s_linear_infinite] fill-blue-600 <?= $types ?> block mx-auto mt-2"
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-10 animate-[spin_0.8s_linear_infinite] fill-blue-600 <?= htmlspecialchars($types) ?> block mx-auto mt-2"
                 viewBox="0 0 24 24">
                 <path
                     d="M12 22c5.421 0 10-4.579 10-10h-2c0 4.337-3.663 8-8 8s-8-3.663-8-8c0-4.336 3.663-8 8-8V2C6.579 2 2 6.58 2 12c0 5.421 4.579 10 10 10z"

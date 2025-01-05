@@ -3,7 +3,7 @@
 
 <?php
 require_once "../class/class_rejister.php";
-class utilisateurs {
+class utilisateurs extends Register{
 
     public function __construct()
     {

@@ -303,18 +303,6 @@ public function ArticleCountAuteur($email) {
 
 
 
-
- //  public editArticle();
-//  public annuleArticle();
-
-
-
-
-
-
-
-
-
   // Getters
   public function getTitle()
   {

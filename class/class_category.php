@@ -68,31 +68,5 @@ public function Countcategory() {
 
 }
 
-// public function editArticle(
-//   $title
-// ) {
-//   try {
-//       $sql = "UPDATE article SET
-//           names = :names,
-//           WHERE id = :id";
-
-//       $stmt = $this->pdo->prepare($sql);
-
-//       $stmt->bindParam(':title', $title, PDO::PARAM_STR);
-//       $stmt->bindParam(':content', $content, PDO::PARAM_STR);
-//       $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
-//       $stmt->bindParam(':author_id', $author_id, PDO::PARAM_INT);
-//       $stmt->bindParam(':upload_img', $upload_img, PDO::PARAM_STR);
-//       $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-
-//       $stmt->execute();
-// if ($stmt) {
-// header('location:../auteur/createArticle.php');
-// }
-//       return "Statut de l'activité mis à jour avec succès.";
-//   } catch (PDOException $e) {
-//       return "Erreur : " . $e->getMessage();
-//   }
-// }
 
 }

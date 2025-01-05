@@ -16,8 +16,8 @@ if (isset($_GET['id'])) {
 
   $like = new likes();
 if (isset($_POST['like'])) {
-    $id_user = $_SESSION['id_users'];
-    $id_article = $_GET['id'];
+    $id_user = htmlspecialchars($_SESSION['id_users']);
+    $id_article = htmlspecialchars($_GET['id']);
     $like->addlikes($id_user, $id_article);
 
 }
@@ -28,9 +28,9 @@ $likeExists = $like->Getlike($id_article);
 
 $comment = new Comments();
 if (isset($_POST['comment'])|| isset($_POST['comment_text'])) {
-    $id_user = $_SESSION['id_users'];
-    $id_article = $_GET['id'];
-    $comment_text = $_POST['comment_text'];
+    $id_user = htmlspecialchars($_SESSION['id_users']);
+    $id_article = htmlspecialchars($_GET['id']);
+    $comment_text = htmlspecialchars($_POST['comment_text']);
     $comment->addComment($id_user, $id_article,$comment_text);
 
 }
@@ -72,6 +72,8 @@ $id_article = $_GET['id'];
 
 </style>
 
+
+
 <div class="flex flex-wrap">
   <!-- Left Section -->
   <div class="w-full sm:w-8/12 mb-10 px-6 sm:px-10">
@@ -80,7 +82,10 @@ $id_article = $_GET['id'];
         <div class="text-4xl font-bold text-gray-800">
         Cultures <span class="text-green-700">.</span>
         </div>
-        <div>
+        <div class="flex items-center space-x-4">
+    <a href="index.php" class="text-teal-500 hover:text-teal-700 font-semibold px-4 py-2 border border-teal-500 rounded-md hover:bg-teal-100 transition duration-200">
+    Accueil
+    </a>
           <img src="https://image.flaticon.com/icons/svg/497/497348.svg" alt="" class="w-8">
         </div>
       </nav>
@@ -213,17 +218,17 @@ $id_article = $_GET['id'];
 </body>
 <script>
 
-document.querySelectorAll('.emoji').forEach(emoji => {
-    emoji.addEventListener('click', (event) => {
-        const selectedEmoji = event.target.textContent;
-        alert(`You selected: ${selectedEmoji}`);
-     
-     
-    });
-     
+  document.querySelectorAll('.emoji').forEach(emoji => {
+      emoji.addEventListener('click', (event) => {
+          const selectedEmoji = event.target.textContent;
+          alert(`You selected: ${selectedEmoji}`);
+      
+      
+      });
+      
 
-});
-      function getLike(iconClass) {
+  });
+        function getLike(iconClass) {
     const mainButtonIcon = document.querySelector('.fac'); 
     mainButtonIcon.className = iconClass; 
 }

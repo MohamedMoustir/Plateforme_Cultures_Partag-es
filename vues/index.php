@@ -14,7 +14,7 @@ require_once "../class/class_Comments.php";
  $article = new Article();
 
  if (isset($_POST['CategoryID'])) {
-    $id = $_POST['CategoryID'];
+    $id = htmlspecialchars($_POST['CategoryID']);
     header('Location: ../vues/index.php?page-nr=1&category=' . $id);
     exit(); 
 }
@@ -27,7 +27,6 @@ require_once "../class/class_Comments.php";
  
  $categorys = new Category();
  $allcategory = $categorys->afficherCategory();
-echo $_SESSION['role'];
 
  if (!isset($_SESSION['role']) || $_SESSION['role'] === '' || $_SESSION['role'] !== 'user') {
     header('Location: ../login.php');
@@ -196,10 +195,11 @@ echo $_SESSION['role'];
             <div class="container">
                 <div class="row g-0 gx-5 align-items-end">
                     <div class="col-lg-6">
-                        <div class="text-start mx-auto mb-5 wow slideInLeft" data-wow-delay="0.1s">
-                            <h1 class="mb-3">Property Listing</h1>
-                            <p>Eirmod sed ipsum dolor sit rebum labore magna erat. Tempor ut dolore lorem kasd vero ipsum sit eirmod sit diam justo sed rebum.</p>
-                        </div>
+                    <div class="text-start mx-auto mb-5 wow slideInLeft" data-wow-delay="0.1s">
+    <h1 class="mb-3">Explore Our Cultural Articles</h1>
+    <p>Discover a wide range of articles covering various aspects of art and culture. Whether you're interested in painting, music, literature, or cinema, you'll find content that inspires and educates.</p>
+</div>
+
                     </div>
                     
 
