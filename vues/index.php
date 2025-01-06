@@ -24,6 +24,7 @@ require_once "../class/class_favorites.php";
  $pages = $article->pages;
 
  
+ 
  $categorys = new Category();
  $allcategory = $categorys->afficherCategory();
 
