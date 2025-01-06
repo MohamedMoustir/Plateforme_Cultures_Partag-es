@@ -89,14 +89,30 @@ $id_article = $_GET['id'];
           <img src="https://image.flaticon.com/icons/svg/497/497348.svg" alt="" class="w-8">
         </div>
       </nav>
-      <header class="lg:flex mt-12 items-center">
-        <div class="w-full lg:w-8/12">
-          <h1 class="text-4xl lg:text-5xl font-semibold text-gray-800 leading-tight mb-4">Partageons la Culture <span class="text-green-700"><?= $Detail['names']; ?></span></h1>
-          <div class="w-20 h-2 bg-green-700 mb-6"></div>
-          <p class="text-lg mb-10 text-gray-600"><?= $Detail['content']; ?></p>
-          <button class="bg-green-500 text-white text-xl font-semibold py-3 px-6 rounded-md shadow-md hover:bg-green-600 transition duration-300 ease-in-out">Explore Our Collection</button>
-        </div>
-      </header>
+      
+
+<header class="lg:flex mt-12 items-center">
+    <div class="w-full lg:w-8/12">
+        <h1 class="text-4xl lg:text-5xl font-semibold text-gray-800 leading-tight mb-4">Partageons la Culture <span class="text-green-700"><?= $Detail['names']; ?></span></h1>
+        <div class="w-20 h-2 bg-green-700 mb-6"></div>
+        <p class="text-lg mb-10 text-gray-600"><?= $Detail['content']; ?></p>
+        <div class="mt-3">
+    <!-- Tags section -->
+    <div class="tags space-x-3 mb-6">
+        <span class="inline-block bg-teal-200 text-teal-800 py-1 px-4 rounded-full text-sm font-semibold">
+            Tag1
+        </span>
+        <span class="inline-block bg-teal-200 text-teal-800 py-1 px-4 rounded-full text-sm font-semibold">
+            Tag2
+        </span>
+        <span class="inline-block bg-teal-200 text-teal-800 py-1 px-4 rounded-full text-sm font-semibold">
+            Tag3
+        </span>
+    </div>
+</div>
+    </div>
+</header>
+
 
       <!-- Likes, Comments, and Jim Section -->
       <div class="mt-8 flex justify-between items-center text-gray-600">
@@ -138,7 +154,7 @@ $id_article = $_GET['id'];
         <div class="flex items-center space-x-6">
         
 
-          <!-- Category Title -->
+       
          
         </div>
 

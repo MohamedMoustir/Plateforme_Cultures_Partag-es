@@ -4,14 +4,14 @@ require_once  "./database/connexion.php";
 require_once   "class/class_rejister.php";
 
 if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['btn_submit'])) {
-  if (isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['role'])) {
+  if (isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['role']) && isset($_FILES['avatar'])) {
        $username = $_POST['name'] ;
        $email = $_POST['email'] ;
        $password = $_POST['password'];
        $role = $_POST['role'];
-
+       $upload_img = $_FILES['avatar'];
    $register = new Register();
-   $register->insertUtilisateurs($username, $email, $password, $role);
+   $register->insertUtilisateurs($username, $email, $password, $role,$upload_img);
 if ($register) {
     header('location:login.php');
     exit();
@@ -144,91 +144,104 @@ if ($register) {
 
     <!-- Sign Up Form -->
     <div class="max-w-md mx-auto px-4 py-16">
-        <div class="login-form bg-white rounded-lg shadow-md overflow-hidden fade-in active">
-            <!-- Form Header -->
-            <div class="bg-secondary p-6">
-                <h2 class="text-2xl text-white font-bold flex items-center">
-                    <i class="fas fa-user-plus mr-3"></i>
-                    Create an Account
-                </h2>
-            </div>
+    <div class="login-form bg-white rounded-lg shadow-md overflow-hidden fade-in active">
+        <!-- Form Header -->
+        <div class="bg-secondary p-6">
+            <h2 class="text-2xl text-white font-bold flex items-center">
+                <i class="fas fa-user-plus mr-3"></i>
+                Create an Account
+            </h2>
+        </div>
 
-            <!-- Form Body -->
-            <div class="p-6 space-y-6">
-                <form method="POST" action="" class="space-y-6">
-                    <div class="input-group">
-                        <label class="block text-secondary mb-2">
-                            <i class="fas fa-user mr-2"></i>Full Name
-                        </label>
-                        <input 
-                            type="text" 
-                            name="name" 
-                            required
-                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-primary transition-colors"
-                            placeholder="Enter your full name"
-                        >
-                    </div>
-
-                    <div class="input-group">
-                        <label class="block text-secondary mb-2">
-                            <i class="fas fa-envelope mr-2"></i>Email Address
-                        </label>
-                        <input 
-                            type="email" 
-                            name="email" 
-                            required
-                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-primary transition-colors"
-                            placeholder="Enter your email"
-                        >
-                    </div>
-
-                    <div class="input-group">
-                        <label class="block text-secondary mb-2">
-                            <i class="fas fa-lock mr-2"></i>Password
-                        </label>
-                        <input 
-                            type="password" 
-                            name="password" 
-                            required
-                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-primary transition-colors"
-                            placeholder="Create a password"
-                        >
-                    </div>
-
-                    <div class="input-group">
-                        <label class="block text-secondary mb-2">
-                            <i class="fas fa-user-tag mr-2"></i>Role
-                        </label>
-                        <select 
-                            name="role" 
-                            required
-                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-primary transition-colors"
-                        >
-                            <option value="" disabled selected>Select your role</option>
-                            <option value="auteur">Auteur</option>
-                            <option value="user">Utilisateur</option>
-                        </select>
-                    </div>
-
-                    <button 
-                        type="submit"
-                        name="btn_submit" 
-                        class="w-full bg-primary text-white py-3 rounded-lg hover:bg-opacity-90 transition-all duration-200 flex items-center justify-center"
+        <!-- Form Body -->
+        <div class="p-6 space-y-6">
+            <form method="POST" action="" class="space-y-6" enctype="multipart/form-data">
+                <div class="input-group">
+                    <label class="block text-secondary mb-2">
+                        <i class="fas fa-user mr-2"></i>Full Name
+                    </label>
+                    <input 
+                        type="text" 
+                        name="name" 
+                        required
+                        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-primary transition-colors"
+                        placeholder="Enter your full name"
                     >
-                        <i class="fas fa-user-plus mr-2"></i>
-                        Create Account
-                    </button>
+                </div>
 
-                    <div class="text-center text-neutral">
-                        Already have an account? 
-                        <a href="signin.php" class="text-primary hover:underline">
-                            Login here
-                        </a>
-                    </div>
-                </form>
-            </div>
+                <div class="input-group">
+                    <label class="block text-secondary mb-2">
+                        <i class="fas fa-envelope mr-2"></i>Email Address
+                    </label>
+                    <input 
+                        type="email" 
+                        name="email" 
+                        required
+                        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-primary transition-colors"
+                        placeholder="Enter your email"
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label class="block text-secondary mb-2">
+                        <i class="fas fa-lock mr-2"></i>Password
+                    </label>
+                    <input 
+                        type="password" 
+                        name="password" 
+                        required
+                        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-primary transition-colors"
+                        placeholder="Create a password"
+                    >
+                </div>
+
+                <!-- File Input -->
+                <div class="input-group">
+                    <label class="block text-secondary mb-2">
+                        <i class="fas fa-image mr-2"></i>Profile Picture
+                    </label>
+                    <input 
+                        type="file" 
+                        name="avatar" 
+                        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-primary transition-colors"
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label class="block text-secondary mb-2">
+                        <i class="fas fa-user-tag mr-2"></i>Role
+                    </label>
+                    <select 
+                        name="role" 
+                        required
+                        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-primary transition-colors"
+                    >
+                        <option value="" disabled selected>Select your role</option>
+                        <option value="auteur">Auteur</option>
+                        <option value="user">Utilisateur</option>
+                    </select>
+                </div>
+
+                <button 
+                    type="submit"
+                    name="btn_submit" 
+                    class="w-full bg-primary text-white py-3 rounded-lg hover:bg-opacity-90 transition-all duration-200 flex items-center justify-center"
+                >
+                    <i class="fas fa-user-plus mr-2"></i>
+                    Create Account
+                </button>
+
+                <div class="text-center text-neutral">
+                    Already have an account? 
+                    <a href="signin.php" class="text-primary hover:underline">
+                        Login here
+                    </a>
+                </div>
+            </form>
         </div>
     </div>
+</div>
+
 
     <script>
        

@@ -7,8 +7,7 @@ require_once  "../database/connexion.php";
 require_once "../class/class_category.php";
 require_once "../class/class_likes.php";
 require_once "../class/class_Comments.php";
-
-
+require_once "../class/class_favorites.php";
 
 
  $article = new Article();
@@ -34,9 +33,30 @@ require_once "../class/class_Comments.php";
 }
 
 
+if (isset($_GET['AddTofavorites'])) {
+    $favorites = new favorites();
+    $id_users = $_SESSION['id_users'];
+    $id_article = $_GET['AddTofavorites'] ;
+    $favorites->insertfavoritesArticle($id_users,$id_article);
+}
+var_dump($_SESSION['id_users'], $_GET['AddTofavorites']);
 
+// $to = "itsmoustir@gmail.com";
+// $subject = "My subject";
+// $message = "Hi Moustir";
+// $headers = "From: your-email@example.com" . "\r\n" .
+//            "Reply-To: your-email@example.com" . "\r\n" .
+//            "X-Mailer: PHP/" . phpversion();
 
+// if (mail($to, $subject, $message, $headers)) {
+//     echo "Email sent successfully!";
+// } else {
+//     echo "Failed to send the email.";
+// }
 ?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -72,7 +92,15 @@ require_once "../class/class_Comments.php";
     <!-- Template Stylesheet -->
     <link href="../css/style.css" rel="stylesheet">
 </head>
+<style>
+       #popup {
+        transition: opacity 0.5s ease, pointer-events 0s 0.5s;
+    }
 
+    #popup-content {
+        transition: transform 0.5s ease;
+    }
+</style>
 <body>
     <div class="container-xxl bg-white p-0">
         <!-- Spinner Start -->
@@ -85,11 +113,12 @@ require_once "../class/class_Comments.php";
 
 
 <!-- Navbar Start -->
-<div class="container-fluid nav-bar bg-transparent">
-    <nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4">
+<div class="container-fluid nav-bar bg-transparent  ">
+    <nav class="navbar  navbar-expand-lg bg-white navbar-light py-0 px-4">
         <a href="index.html" class="navbar-brand d-flex align-items-center text-center">
             <div class="icon p-2 me-2">
-                <img class="img-fluid" src="../img/icon-deal.png" alt="Icon" style="width: 30px; height: 30px;">
+                <!-- Resized the image size -->
+                <img class="img-fluid" src="../img/icon-deal.png" alt="Icon" style="width: 20px; height: 20px;">
             </div>
             <h1 class="m-0 text-primary">Makaan</h1>
         </a>
@@ -121,10 +150,15 @@ require_once "../class/class_Comments.php";
         </div>
     </nav>
     <form method="POST" action="../login.php?logout" class="d-flex justify-content-end p-2" style="position: absolute; top: 15%; right: 5%;">
-    <button type="submit" name="logout" class="bg-primary text-white p-2 rounded">Logout</button>
-</form>
-
+        <button type="submit" name="logout" class="bg-primary text-white p-2 rounded">Logout</button>
+        <!-- Profile image next to logout button -->
+        <a href="#" class="profile ml-3" id="profile-pic">
+            <img class="w-[36px] h-[36px] object-cover rounded-full" width="36" height="36" src="../upload/ef47b5d601.jpg" alt="Profile Picture">
+        </a>
+    </form>
 </div>
+
+
 
         <!-- Navbar End -->
 
@@ -220,87 +254,94 @@ require_once "../class/class_Comments.php";
                
 
                 <div class="tab-content">
-                <div id="tab-1" class="tab-pane fade show p-0 active">
-    <div class="row g-4">
-        <?php foreach ($articleapproved as $article): 
-            
-$like = new likes();
-$id_article = $article['id'];
-$likeExists = $like->Getlike($id_article);
+    <div id="tab-1" class="tab-pane fade show p-0 active">
+        <div class="row g-4">
+            <?php foreach ($articleapproved as $article): 
+                $like = new likes();
+                $id_article = $article['id'];
+                $likeExists = $like->Getlike($id_article);
 
-$Comments = new Comments();
-$id_article = $article['id'];
-$CommitExists = $Comments->CountCommit($id_article);
+                $Comments = new Comments();
+                $id_article = $article['id'];
+                $CommitExists = $Comments->CountCommit($id_article);
             ?>
-          <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-    <div class="property-item rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 bg-white">
-        <div class="relative overflow-hidden">
-            <a href="#">
-                <img class="w-full h-64 object-cover transition-transform duration-300 transform hover:scale-110"
-                     src="<?= htmlspecialchars($article['image']); ?>" alt="Property Image">
-            </a>
+            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                <div class="property-item rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 bg-white">
+                    <div class="relative overflow-hidden">
+                        <a href="#">
+                            <img class="w-full h-64 object-cover transition-transform duration-300 transform hover:scale-110"
+                                 src="<?= htmlspecialchars($article['image']); ?>" alt="Property Image">
+                        </a>
+                         <form action="../vues/index.php?AddTofavorites=<?= $article['id']; ?>" method="POST">
+                        <button type="submit" class="absolute  top-3 right-3 text-white hover:text-red-500 text-2xl transition-all duration-300"
+                                onclick="toggleFavorite(<?= $article['id']; ?>)">
+                            <i class="fa-regular fa-heart " id="heart-icon-<?= $article['id']; ?>"></i>
+                        </button>
+                        </form>
+                        <div class="absolute top-4 left-4 bg-teal-500 text-white text-xs font-medium py-1 px-3 rounded-lg shadow-md">
+                            <?= htmlspecialchars($article['title']); ?>
+                        </div>
+                        <div class="absolute bottom-4 left-4 bg-white text-teal-500 text-xs font-medium py-1 px-3 rounded-lg shadow-md">
+                            <?= htmlspecialchars($article['names']); ?>
+                        </div>
+                    </div>
 
-            <div class="absolute top-4 left-4 bg-teal-500 text-white text-xs font-medium py-1 px-3 rounded-lg shadow-md">
-                <?= htmlspecialchars($article['title']); ?>
-            </div>
-            <div class="absolute bottom-4 left-4 bg-white text-teal-500 text-xs font-medium py-1 px-3 rounded-lg shadow-md">
-                <?= htmlspecialchars($article['names']); ?>
-            </div>
-        </div>
+                    <div class="p-4">
+                        <div class="flex items-center space-x-3 mb-3">
+                            <div class="flex items-center justify-center w-10 h-10 border-2 border-teal-500 rounded-full">
+                                <i class="fa-solid fa-user text-teal-500 text-lg"></i>
+                            </div>
+                            <h5 class="text-teal-700 text-sm font-medium">
+                                <?= htmlspecialchars($article['name']); ?>
+                            </h5>
+                        </div>
+                        <a href="#"
+                           class="text-gray-800 text-lg font-semibold hover:text-teal-500 transition-colors duration-200 block">
+                           <?= htmlspecialchars($article['content']); ?>
+                        </a>
+                        <p class="text-gray-600 text-sm mt-2 flex items-center">
+                            <i class="fa fa-calendar-alt text-teal-500 mr-2"></i>
+                            <?= "Publié le " . date("d M Y", strtotime($article['created_at'])); ?>
+                        </p>
+                    
 
-        <div class="p-4">
-            <div class="flex items-center space-x-3 mb-3">
-                <div class="flex items-center justify-center w-10 h-10 border-2 border-teal-500 rounded-full">
-                    <i class="fa-solid fa-user text-teal-500 text-lg"></i>
+                        <div class="flex items-center mt-3">
+                            <span class="text-yellow-500">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star-half-alt"></i>
+                                <i class="fa-regular fa-star"></i>
+                            </span>
+                            <span class="ml-2 text-gray-500 text-sm">(4.5)</span>
+                        </div>
+
+                        <div class="flex justify-between items-center text-gray-500 text-sm mt-3">
+                            <div class="flex items-center space-x-2">
+                                <i class="fa-solid fa-thumbs-up text-teal-500"></i>
+                                <span class=""><?= $likeExists ?> J’aime</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <i class="fa-solid fa-comments"></i>
+                                <span><?= $CommitExists ?> commentaires</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center p-4 border-t border-gray-200 bg-gray-50">
+                        <a href="../vues/page_details.php?id=<?= $article['id']; ?>" target="_blank" 
+                           class="text-teal-500 hover:text-teal-700 text-sm font-semibold hover:underline transition-all duration-300">
+                            Lire la suite
+                        </a>
+                    </div>
                 </div>
-                <h5 class="text-teal-700 text-sm font-medium">
-                    <?= htmlspecialchars($article['name']); ?>
-                </h5>
             </div>
-            <a href="#"
-               class="text-gray-800 text-lg font-semibold hover:text-teal-500 transition-colors duration-200 block">
-               <?= htmlspecialchars($article['content']); ?>
-            </a>
-            <p class="text-gray-600 text-sm mt-2 flex items-center">
-                <i class="fa fa-calendar-alt text-teal-500 mr-2"></i>
-                <?= "Publié le " . date("d M Y", strtotime($article['created_at'])); ?>
-            </p>
-
-            <div class="flex items-center mt-3">
-                <span class="text-yellow-500">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star-half-alt"></i>
-                    <i class="fa-regular fa-star"></i>
-                </span>
-                <span class="ml-2 text-gray-500 text-sm">(4.5)</span>
-            </div>
-
-            <div class="flex justify-between items-center text-gray-500 text-sm mt-3">
-                <div class="flex items-center space-x-2">
-                    <i class="fa-solid fa-thumbs-up text-teal-500"></i>
-                    <span class=""><?= $likeExists ?> J’aime</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <i class="fa-solid fa-comments"></i>
-                    <span><?= $CommitExists ?> commentaires</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="flex justify-between items-center p-4 border-t border-gray-200 bg-gray-50">
-            <a href="../vues/page_details.php?id=<?= $article['id']; ?>" target="_blank" 
-               class="text-teal-500 hover:text-teal-700 text-sm font-semibold hover:underline transition-all duration-300">
-                Lire la suite
-            </a>
+            <?php endforeach; ?>
         </div>
     </div>
 </div>
 
-        <?php endforeach; ?>
-    </div>
-</div>
+
 
                     
     <ul class="flex mt-8 space-x-5 justify-center font-[sans-serif]">
@@ -458,8 +499,98 @@ $CommitExists = $Comments->CountCommit($id_article);
 
 
         <!-- Back to Top -->
-        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+      
+    
+<!-- Popup Modal -->
+<div id="popup" class="fixed inset-0 flex items-center justify-end bg-gray-500 bg-opacity-50 opacity-0 pointer-events-none transition-all duration-500 z-[9999]">
+<div class="bg-white">
+    <div class="container mx-auto py-8">
+        <div class="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
+            <!-- Profile Section -->
+            <div class="col-span-4 sm:col-span-3">
+                <div class=" shadow rounded-lg p-6">
+                    <div class="flex flex-col items-center">
+                        <img src="https://randomuser.me/api/portraits/men/94.jpg" class="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0" alt="John Doe">
+                        <h1 class="text-xl font-bold">John Doe</h1>
+                        <p class="text-gray-700">Software Developer</p>
+                        <div class="mt-6 flex flex-wrap gap-4 justify-center">
+                            <a href="#" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Contact</a>
+                            <a href="#" class="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded">Resume</a>
+                        </div>
+                    </div>
+                    <hr class="my-6 border-t border-gray-300">
+                    <div class="flex flex-col">
+                        <span class="text-gray-700 uppercase font-bold tracking-wider mb-2">Skills</span>
+                        <ul>
+                            <li class="mb-2">JavaScript</li>
+                            <li class="mb-2">React</li>
+                            <li class="mb-2">Node.js</li>
+                            <li class="mb-2">HTML/CSS</li>
+                            <li class="mb-2">Tailwind CSS</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About and Experience Section -->
+            <div class="col-span-4 sm:col-span-9">
+    <div class="shadow rounded-lg p-6">
+        <h2 class="text-xl font-bold mb-4">About Me</h2>
+        <p class="text-gray-700">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus est vitae tortor ullamcorper, ut vestibulum velit convallis. Aenean posuere risus non velit egestas suscipit. Nunc finibus vel ante id euismod. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam erat volutpat. Nulla vulputate pharetra tellus, in luctus risus rhoncus id.</p>
+
+        <h3 class="font-semibold text-center mt-3 -mb-2">Find me on</h3>
+        <div class="flex justify-center items-center gap-6 my-6">
+            <!-- Social Media Icons -->
+            <a href="#" class="text-gray-700 hover:text-orange-600" target="_blank">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="h-6">
+                    <path fill="currentColor" d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z"></path>
+                </svg>
+            </a>
+            <!-- Add other social media icons as needed -->
+        </div>
+
+        <!-- Experience Section -->
+        <h2 class="text-xl font-bold mt-6 mb-4">Experience</h2>
+        <div class="mb-6">
+            <div class="flex justify-between flex-wrap gap-2 w-full">
+                <span class="text-gray-700 font-bold">Web Developer</span>
+                <p><span class="text-gray-700 mr-2">at ABC Company</span><span class="text-gray-700">2017 - 2019</span></p>
+            </div>
+            <p class="mt-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus est vitae tortor ullamcorper, ut vestibulum velit convallis. Aenean posuere risus non velit egestas suscipit.</p>
+        </div>
+
+        <!-- Additional Experience Entries can be added similarly -->
     </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<script>
+  
+    const profilePic = document.getElementById("profile-pic");
+    const popup = document.getElementById("popup");
+    const closePopupButton = document.getElementById("close-popup");
+    const popupContent = document.getElementById("popup-content");
+
+    
+    profilePic.addEventListener("click", function() {
+        popup.classList.remove("opacity-0", "pointer-events-none");
+        popup.classList.add("opacity-100", "pointer-events-auto");
+        popupContent.classList.remove("translate-x-full");
+        popupContent.classList.add("translate-x-0");
+    });
+
+  
+    closePopupButton.addEventListener("click", function() {
+        popup.classList.remove("opacity-100", "pointer-events-auto");
+        popup.classList.add("opacity-0", "pointer-events-none");
+        popupContent.classList.remove("translate-x-0");
+        popupContent.classList.add("translate-x-full");
+    });
+</script>
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -471,9 +602,7 @@ $CommitExists = $Comments->CountCommit($id_article);
 
     <!-- Template Javascript -->
     <script src="../js/main.js"></script>
-    <script>
-        
-    </script>
+    
 </body>
 
 </html>
