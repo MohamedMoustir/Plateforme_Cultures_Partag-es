@@ -61,14 +61,14 @@ $id_article = $_GET['id'];
 
 <style>
 
-.relative:hover .absolute {
-    display: flex;
-}
+      .relative:hover .absolute {
+          display: flex;
+      }
 
 
-.emoji {
-    transition: background-color 0.3s;
-}
+      .emoji {
+          transition: background-color 0.3s;
+      }
 
 </style>
 

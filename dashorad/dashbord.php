@@ -25,12 +25,9 @@ $categorys = new Category();
 
 $allowedEmails = ['Admin@gmail.com']; 
 
-
 if (
     !isset($_SESSION['email'], $_SESSION['role']) || 
     in_array($_SESSION['email'], $allowedEmails) 
-
-   
 ) {
     header('Location: ../login.php');
     exit;

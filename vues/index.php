@@ -33,14 +33,16 @@ require_once "../class/class_favorites.php";
     exit;
 }
 
-
+$favorites = new favorites();
 if (isset($_GET['AddTofavorites'])) {
-    $favorites = new favorites();
+    
     $id_users = $_SESSION['id_users'];
+    $email = $_SESSION['email'];
     $id_article = $_GET['AddTofavorites'] ;
-    $favorites->insertfavoritesArticle($id_users,$id_article);
+    $favorites->insertfavoritesArticle($id_users,$id_article,$email);
 }
-var_dump($_SESSION['id_users'], $_GET['AddTofavorites']);
+
+
 
 // $to = "itsmoustir@gmail.com";
 // $subject = "My subject";
@@ -101,6 +103,12 @@ var_dump($_SESSION['id_users'], $_GET['AddTofavorites']);
     #popup-content {
         transition: transform 0.5s ease;
     }
+    .favorite-btn.clicked {
+  background-color: red;
+  color: white;
+  border-color: red;
+}
+
 </style>
 <body>
     <div class="container-xxl bg-white p-0">
@@ -257,7 +265,13 @@ var_dump($_SESSION['id_users'], $_GET['AddTofavorites']);
                 <div class="tab-content">
     <div id="tab-1" class="tab-pane fade show p-0 active">
         <div class="row g-4">
-            <?php foreach ($articleapproved as $article): 
+            <?php 
+             $favorites = new favorites();
+             $email = $_SESSION['email'];
+             $favoriteArticles = $favorites->SelectFavoritesArticle($email); 
+             $favoriteArticleIds = array_column($favoriteArticles, 'article_id');
+
+            foreach ($articleapproved as $article): 
                 $like = new likes();
                 $id_article = $article['id'];
                 $likeExists = $like->Getlike($id_article);
@@ -265,6 +279,8 @@ var_dump($_SESSION['id_users'], $_GET['AddTofavorites']);
                 $Comments = new Comments();
                 $id_article = $article['id'];
                 $CommitExists = $Comments->CountCommit($id_article);
+                 
+              
             ?>
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
                 <div class="property-item rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 bg-white">
@@ -273,11 +289,13 @@ var_dump($_SESSION['id_users'], $_GET['AddTofavorites']);
                             <img class="w-full h-64 object-cover transition-transform duration-300 transform hover:scale-110"
                                  src="<?= htmlspecialchars($article['image']); ?>" alt="Property Image">
                         </a>
-                         <form action="../vues/index.php?AddTofavorites=<?= $article['id']; ?>" method="POST">
-                        <button type="submit" class="absolute  top-3 right-3 text-white hover:text-red-500 text-2xl transition-all duration-300"
-                                onclick="toggleFavorite(<?= $article['id']; ?>)">
-                            <i class="fa-regular fa-heart " id="heart-icon-<?= $article['id']; ?>"></i>
-                        </button>
+                        <form action="../vues/index.php?AddTofavorites=<?= $article['id']; ?>" method="POST">
+                            <button type="submit" class="absolute top-3 right-3 text-white text-2xl transition-all duration-300">
+                                <?php 
+                                $red = in_array($article['id'], $favoriteArticleIds) ? 'text-red-500' : 'text-white'; 
+                                ?>
+                                <i class="fas fa-heart <?= $red ?>" id="heart-icon-<?= $article['id']; ?>"></i>
+                            </button>
                         </form>
                         <div class="absolute top-4 left-4 bg-teal-500 text-white text-xs font-medium py-1 px-3 rounded-lg shadow-md">
                             <?= htmlspecialchars($article['title']); ?>
