@@ -7,7 +7,7 @@ require_once "../class/class_users.php";
 
 
   $users = new utilisateurs;
-  $allusers = $users->Selectutilisateurs();
+  $allusers = $users->Allutilisateurs();
 
   if (isset($_POST['archived']) && isset($_GET['id'])) {
     $id = $_GET['id'];
@@ -28,7 +28,7 @@ require_once "../class/class_users.php";
 //     exit;
 //   }
 ?>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 <div class="overflow-hidden">
     <table class="ml-[340px] w-[80%] divide-y divide-gray-200 shadow-md rounded-lg">
         <thead class="bg-gray-100">
@@ -55,9 +55,12 @@ require_once "../class/class_users.php";
                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
                         </td>   <?php }?>
                         <td class="px-6 py-4 whitespace-nowrap">
+                        <a href="../vues/profile.php?id=<?= $user->utilisateurID ?>" name="eye" class="ml-2 px-4 py-2 font-medium text-white bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:shadow-outline-red active:bg-red-600 transition duration-150 ease-in-out"><i class="fa-solid fa-eye"></i></a>
+                     <?php if ($user->role != 'admin' ) {?>
                             <button type="submit" name="archived" class="ml-2 px-4 py-2 font-medium text-white bg-red-600 rounded-md hover:bg-red-500 focus:outline-none focus:shadow-outline-red active:bg-red-600 transition duration-150 ease-in-out">archive</button>
                             <button type="submit" name="Active" class="ml-2 px-4 py-2 font-medium text-white bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:shadow-outline-red active:bg-red-600 transition duration-150 ease-in-out">Active</button>
-
+                     <?php  } ?>
+                             
                         </td>
                     </tr>
                 </form>

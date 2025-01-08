@@ -4,7 +4,7 @@
 class favorites {
     private $id_users;
     private $id_article;
-   
+    
     public function __construct (){
       $db =new Database();
       $this->pdo = $db->getPdo();
@@ -12,7 +12,7 @@ class favorites {
             
      public function insertfavoritesArticle($id_users, $id_article, $email) {
         try {
-            $stmt = "SELECT * FROM `favorites` 
+            $stmt = "SELECT * FROM favorites 
                      JOIN utilisateurs ON favorites.user_id = utilisateurs.utilisateurID 
                      JOIN article ON favorites.article_id = article.id 
                      JOIN category ON article.category_id = category.CategoryID 

@@ -5,6 +5,7 @@ require_once "../class/class_category.php";
 require_once  "../database/connexion.php";
 require_once "../class/class_article.php";
 require_once "../class/class_users.php";
+require_once "../class/class_tags.php";
 
 
 
@@ -14,6 +15,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $description = htmlspecialchars($_POST['desciption']);  
       $categorys = new Category();
       $category =$categorys->AjouteCategory($names,$description);
+    }
+    
+    if (isset($_POST['tag'])) {
+      $tags = new tags();
+      $tagname = $_POST['tag'];
+      $tag =$tags->AjouteTags($tagname);
     }
 
 }
@@ -29,7 +36,7 @@ if (
     !isset($_SESSION['email'], $_SESSION['role']) || 
     in_array($_SESSION['email'], $allowedEmails) 
 ) {
-    header('Location: ../login.php');
+    header('Location: ../vues\login.php');
     exit;
 }
 
@@ -42,7 +49,10 @@ $user=$users->UsersCount();
 
 $category =$categorys->Countcategory();
 
-
+  if (!isset($_SESSION['role']) || $_SESSION['role'] === null || $_SESSION['role'] === '') {
+    header('Location: ../vues/login.php');
+    exit;
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -314,7 +324,7 @@ $category =$categorys->Countcategory();
           </li>
         </ul>
         <ul class="mb-4 flex flex-col gap-1">
-        <a href="../login.php?logout" class="flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-lg shadow-md hover:bg-blue-700 transition duration-200">
+        <a href="../vues/login.php?logout" class="flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-lg shadow-md hover:bg-blue-700 transition duration-200">
   <i class="fas fa-sign-out-alt mr-2"></i> Log Out
 </a>
 
@@ -497,48 +507,90 @@ $category =$categorys->Countcategory();
 
   </div>
 
-  <div id="modal-container" class="fixed inset-0 flex justify-center items-center bg-gray-200 bg-opacity-50 overflow-hidden hidden">
-  <form class="modal bg-white p-8 rounded-lg shadow-lg md:w-1/2 w-4/5" method="POST">
-    <div class="modal__header flex justify-between items-center mb-4">
-      <span class="modal__title text-lg font-semibold">Ajoute Category</span>
-      <button id="close-modal" type="button" class="button button--icon text-gray-500 hover:text-gray-700">
-        <svg width="24" viewBox="0 0 24 24" height="24" xmlns="http://www.w3.org/2000/svg">
+  <div id="modal-container" class="fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-70 overflow-hidden hidden">
+  <form class="modal bg-white p-8 rounded-lg shadow-xl md:w-1/2 w-4/5" method="POST">
+    <!-- Header -->
+    <div class="modal__header flex justify-between items-center mb-6">
+      <select onchange="ajoutMultiple(this.value)" name="type" id="type-selector" class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500">
+        <option value="Category">Ajoute Category</option>
+        <option value="tags">Ajoute Tags</option>
+      </select>
+      <button id="close-modal" type="button" class="text-gray-400 hover:text-gray-600 transition-colors duration-200">
+        <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path fill="none" d="M0 0h24v24H0V0z"></path>
           <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"></path>
         </svg>
       </button>
     </div>
 
-    <div class="modal__body mb-4">
-      <div class="input mb-4">
-        <label class="input__label block text-sm font-medium text-gray-700">Title Category</label>
-        <input name="Category" class="input__field mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" type="text"  required>
-        <p class="input__description text-xs text-gray-500">The title must contain a maximum of 32 characters</p>
+    <!-- Body -->
+    <div class="modal__body mb-6" id="form-content">
+      <div class="input mb-6">
+        <label class="input__label block text-sm font-medium text-gray-700 mb-1">Title Category</label>
+        <input name="Category" class="input__field block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500" type="text" required>
+        <p class="input__description text-xs text-gray-500 mt-1">The title must contain a maximum of 32 characters</p>
       </div>
 
-      <div class="input mb-4">
-        <label class="input__label block text-sm font-medium text-gray-700">Description</label>
-        <textarea name="desciption" class="input__field mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"  required></textarea>
-        <p class="input__description text-xs text-gray-500">Give your Category a good description so everyone knows what it's for</p>
+      <div class="input mb-6">
+        <label class="input__label block text-sm font-medium text-gray-700 mb-1">Description</label>
+        <textarea name="desciption" class="input__field block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500" required></textarea>
+        <p class="input__description text-xs text-gray-500 mt-1">Give your Category a good description so everyone knows what it's for</p>
       </div>
     </div>
 
+    <!-- Footer -->
     <div class="modal__footer">
-      <button type="submit" class="button button--primary w-full py-2 px-4 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-500">Add Category</button>
+      <button type="submit" class="button button--primary w-full py-3 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-500 focus:ring-4 focus:ring-blue-300 transition-all duration-200">Add</button>
     </div>
   </form>
 </div>
 
 
+<script>
+  function ajoutMultiple(value) {
+    const formContent = document.getElementById("form-content");
+    formContent.innerHTML = ""; 
+
+    if (value === "Category") {
+      formContent.innerHTML = `
+        <div class="input mb-4">
+          <label class="input__label block text-sm font-medium text-gray-700">Title Category</label>
+          <input name="Category" class="input__field mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" type="text" required>
+          <p class="input__description text-xs text-gray-500">The title must contain a maximum of 32 characters</p>
+        </div>
+        <div class="input mb-4">
+          <label class="input__label block text-sm font-medium text-gray-700">Description</label>
+          <textarea name="desciption" class="input__field mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required></textarea>
+          <p class="input__description text-xs text-gray-500">Give your Category a good description so everyone knows what it's for</p>
+        </div>
+      `;
+    } else if (value === "tags") {
+      formContent.innerHTML = `
+        <div class="input mb-4">
+          <label class="input__label block text-sm font-medium text-gray-700">Tag Name</label>
+          <input name="tag" class="input__field mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" type="text" required>
+        </div>
+      `;
+    }
+  }
+
+
+  document.getElementById("close-modal").addEventListener("click", () => {
+    document.getElementById("modal-container").classList.add("hidden");
+  });
+</script>
+
+
+
 
 <script>
 document.getElementById('open-modal').addEventListener('click', function() {
-  // Show the modal
+
   document.getElementById('modal-container').style.display = 'flex';
 });
 
 document.getElementById('close-modal').addEventListener('click', function() {
-  // Hide the modal
+
   document.getElementById('modal-container').style.display = 'none';
 });
 

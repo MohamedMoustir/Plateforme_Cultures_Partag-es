@@ -1,9 +1,9 @@
 
 <?php 
 // session_start();
-require_once  "./database/connexion.php";
-require_once   "./class/class_login.php";
-require_once "./class/class_rejister.php";
+require_once  "../database/connexion.php";
+require_once   "../class/class_login.php";
+require_once "../class/class_rejister.php";
 
 if (isset($_GET['logout'])) {
   session_unset();

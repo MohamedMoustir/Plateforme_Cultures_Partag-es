@@ -1,7 +1,7 @@
 
 <?php
-require_once  "./database/connexion.php";
-require_once   "class/class_rejister.php";
+require_once  "../database/connexion.php";
+require_once   "../class/class_rejister.php";
 
 if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['btn_submit'])) {
   if (isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['role']) && isset($_FILES['avatar'])) {

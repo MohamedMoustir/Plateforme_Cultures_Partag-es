@@ -12,6 +12,8 @@
   private $status;
   private $pdo;
   private $upload_img; 
+  private $tags; 
+
 
 
 
@@ -21,7 +23,7 @@
    $this->pdo = $db->getPdo();
   }
 
-  public function createArticle($title,$content,$category_id,$author_id,$upload_img){
+  public function createArticle($title,$content,$category_id,$author_id,$upload_img,$tags){
     
    try{
     if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] === UPLOAD_ERR_OK) {
@@ -37,15 +39,17 @@
          
               }
                
-    $query = "INSERT INTO article (title,content,category_id, author_id,image) VALUES (:title,:content,:category_id,:author_id,:upload_img)";
+    $query = "INSERT INTO article (title,content,category_id, author_id,image,tags_id) VALUES (:title,:content,:category_id,:author_id,:upload_img,:tags_id)";
      $stmt = $this->pdo->prepare( $query);
     $stmt->bindParam(':title',$title,PDO::PARAM_STR);
     $stmt->bindParam(':content',$content,PDO::PARAM_STR);
     $stmt->bindParam(':category_id',$category_id,PDO::PARAM_INT);
     $stmt->bindParam(':author_id',$author_id , PDO::PARAM_INT);
     $stmt->bindParam(':upload_img',$this->upload_img,PDO::PARAM_STR);
+    $stmt->bindParam(':tags_id',$tags,PDO::PARAM_INT);
+
      $stmt->execute();
-     
+     return $this->pdo->lastInsertId();
    }catch (PDOException $e) {
     echo "Errors: " . $e->getMessage();
    }
@@ -299,6 +303,22 @@ public function ArticleCountAuteur($email) {
         return 0;
     }
 }
+
+
+
+    public function insertArticle_Tags($articleId, $tags) {
+        try {
+            foreach ($tags as $tagId) {
+                $sql = "INSERT INTO article_tags (id_article, id_tag) VALUES (:articleId, :tagId)";
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->bindParam(':articleId', $articleId, PDO::PARAM_INT);
+                $stmt->bindParam(':tagId', $tagId, PDO::PARAM_INT);
+                $stmt->execute();
+            }
+        } catch (PDOException $e) {
+            echo "error: " . $e->getMessage();
+        }
+    }
 
 
 

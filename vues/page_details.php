@@ -190,11 +190,12 @@ $id_article = $_GET['id'];
 
         <p class="text-gray-800 mt-2" id="comment-text"><?= $comment->comment_text ?></p>
     </div>
-
+    <?php  if ($_SESSION['id_users'] == $Detail['id']){ ?>
     <div class="ml-4 space-x-2">
         <button class="text-teal-500 hover:text-teal-700 text-sm font-semibold py-1 px-3 rounded-lg border border-teal-500 hover:bg-teal-50 transition duration-200" onclick="editComment()">Edit</button>
         <button class="text-red-500 hover:text-red-700 text-sm font-semibold py-1 px-3 rounded-lg border border-red-500 hover:bg-red-50 transition duration-200" onclick="removeComment()">Remove</button>
     </div>
+    <?php }?>
 </div>
 <?php endforeach ?>
 

@@ -32,27 +32,27 @@ class login extends Register
         $stmt->execute(['email' => $email]);
         $user = $stmt->fetch(PDO::FETCH_OBJ);
    
-        if($password == 'admin123' && $email =='Admin@gmail.com'){
-                header('Location:dashorad/category.php');
-                exit();
-              }
+        
         if ($user) {
           if (password_verify($password,$user->password)) {
 
             $_SESSION['id_users'] = $user->utilisateurID;
             $_SESSION['email'] = $user->email;
+            $_SESSION['name'] = $user->name;
             $_SESSION['password'] = $user->password;
             $_SESSION['role'] = $user->role;
 
           
             if ($user->role == 'user' && $user->archived !== 1) {
              
-                 header('Location:vues/index.php');
+                 header('Location:../vues/index.php');
               exit();
               
-             
-            } elseif($user->role !== 'user' && $user->archived !== 1 ){
-              header('Location:auteur/createArticle.php');
+            } elseif($user->role == 'auteur' && $user->archived !== 1 ){
+              header('Location:../auteur/createArticle.php');
+              exit();
+            }elseif($user->role == 'admin' && $user->archived !== 1 ){
+              header('Location:../dashorad/category.php');
               exit();
             }
           } else {

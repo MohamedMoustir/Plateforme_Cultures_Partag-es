@@ -29,7 +29,7 @@ require_once "../class/class_favorites.php";
  $allcategory = $categorys->afficherCategory();
 
  if (!isset($_SESSION['role']) || $_SESSION['role'] === '' || $_SESSION['role'] !== 'user') {
-    header('Location: ../login.php');
+    header('Location: login.php');
     exit;
 }
 
@@ -158,10 +158,10 @@ if (isset($_GET['AddTofavorites'])) {
             <a href="" class="btn btn-primary px-3 d-none d-lg-flex">Add Property</a>
         </div>
     </nav>
-    <form method="POST" action="../login.php?logout" class="d-flex justify-content-end p-2" style="position: absolute; top: 15%; right: 5%;">
+    <form method="POST" action="login.php?logout" class="d-flex justify-content-end p-2" style="position: absolute; top: 15%; right: 5%;">
         <button type="submit" name="logout" class="bg-primary text-white p-2 rounded">Logout</button>
         <!-- Profile image next to logout button -->
-        <a href="#" class="profile ml-3" id="profile-pic">
+        <a href="profile.php" class="profile ml-3" id="profile-pic">
             <img class="w-[36px] h-[36px] object-cover rounded-full" width="36" height="36" src="../upload/ef47b5d601.jpg" alt="Profile Picture">
         </a>
     </form>
@@ -517,99 +517,9 @@ if (isset($_GET['AddTofavorites'])) {
         <!-- Footer End -->
 
 
-        <!-- Back to Top -->
-      
-    
-<!-- Popup Modal -->
-<div id="popup" class="fixed inset-0 flex items-center justify-end bg-gray-500 bg-opacity-50 opacity-0 pointer-events-none transition-all duration-500 z-[9999]">
-<div class="bg-white">
-    <div class="container mx-auto py-8">
-        <div class="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
-            <!-- Profile Section -->
-            <div class="col-span-4 sm:col-span-3">
-                <div class=" shadow rounded-lg p-6">
-                    <div class="flex flex-col items-center">
-                        <img src="https://randomuser.me/api/portraits/men/94.jpg" class="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0" alt="John Doe">
-                        <h1 class="text-xl font-bold">John Doe</h1>
-                        <p class="text-gray-700">Software Developer</p>
-                        <div class="mt-6 flex flex-wrap gap-4 justify-center">
-                            <a href="#" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Contact</a>
-                            <a href="#" class="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded">Resume</a>
-                        </div>
-                    </div>
-                    <hr class="my-6 border-t border-gray-300">
-                    <div class="flex flex-col">
-                        <span class="text-gray-700 uppercase font-bold tracking-wider mb-2">Skills</span>
-                        <ul>
-                            <li class="mb-2">JavaScript</li>
-                            <li class="mb-2">React</li>
-                            <li class="mb-2">Node.js</li>
-                            <li class="mb-2">HTML/CSS</li>
-                            <li class="mb-2">Tailwind CSS</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- About and Experience Section -->
-            <div class="col-span-4 sm:col-span-9">
-    <div class="shadow rounded-lg p-6">
-        <h2 class="text-xl font-bold mb-4">About Me</h2>
-        <p class="text-gray-700">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus est vitae tortor ullamcorper, ut vestibulum velit convallis. Aenean posuere risus non velit egestas suscipit. Nunc finibus vel ante id euismod. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam erat volutpat. Nulla vulputate pharetra tellus, in luctus risus rhoncus id.</p>
-
-        <h3 class="font-semibold text-center mt-3 -mb-2">Find me on</h3>
-        <div class="flex justify-center items-center gap-6 my-6">
-            <!-- Social Media Icons -->
-            <a href="#" class="text-gray-700 hover:text-orange-600" target="_blank">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="h-6">
-                    <path fill="currentColor" d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z"></path>
-                </svg>
-            </a>
-            <!-- Add other social media icons as needed -->
-        </div>
-
-        <!-- Experience Section -->
-        <h2 class="text-xl font-bold mt-6 mb-4">Experience</h2>
-        <div class="mb-6">
-            <div class="flex justify-between flex-wrap gap-2 w-full">
-                <span class="text-gray-700 font-bold">Web Developer</span>
-                <p><span class="text-gray-700 mr-2">at ABC Company</span><span class="text-gray-700">2017 - 2019</span></p>
-            </div>
-            <p class="mt-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus est vitae tortor ullamcorper, ut vestibulum velit convallis. Aenean posuere risus non velit egestas suscipit.</p>
-        </div>
-
-        <!-- Additional Experience Entries can be added similarly -->
-    </div>
-</div>
-</div>
-</div>
-</div>
-</div>
 
 
-<script>
-  
-    const profilePic = document.getElementById("profile-pic");
-    const popup = document.getElementById("popup");
-    const closePopupButton = document.getElementById("close-popup");
-    const popupContent = document.getElementById("popup-content");
 
-    
-    profilePic.addEventListener("click", function() {
-        popup.classList.remove("opacity-0", "pointer-events-none");
-        popup.classList.add("opacity-100", "pointer-events-auto");
-        popupContent.classList.remove("translate-x-full");
-        popupContent.classList.add("translate-x-0");
-    });
-
-  
-    closePopupButton.addEventListener("click", function() {
-        popup.classList.remove("opacity-100", "pointer-events-auto");
-        popup.classList.add("opacity-0", "pointer-events-none");
-        popupContent.classList.remove("translate-x-0");
-        popupContent.classList.add("translate-x-full");
-    });
-</script>
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

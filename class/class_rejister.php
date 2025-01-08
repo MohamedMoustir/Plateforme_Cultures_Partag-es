@@ -9,14 +9,19 @@ class Register
     protected $role;
     protected $pdo;
     protected $upload_img;
+    protected $bio;
+    protected $phone;
+    protected $address;
+    protected $birthday;
+    protected $utilisateurID;
 
+    
+   
 
-    public function __construct()
-    {
-        $db = new Database();
+    public function __construct (){
+        $db =new Database();
         $this->pdo = $db->getPdo();
-        
-    }
+       }
     public function insertUtilisateurs($username, $email, $password, $role)
     {
         $this->username = $username;
@@ -38,7 +43,7 @@ class Register
     
                 if (in_array($file_ext, $allowedExtensions)) {
                     $unique_image = substr(md5(time()), 0, 10) . '.' . $file_ext;
-                    $this->upload_img = "upload/" . $unique_image;
+                    $this->upload_img = "../upload/" . $unique_image;
     
                     if (move_uploaded_file($file_temp, $this->upload_img)) {
                     } else {
