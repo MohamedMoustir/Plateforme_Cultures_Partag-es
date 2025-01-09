@@ -49,10 +49,11 @@ $user=$users->UsersCount();
 
 $category =$categorys->Countcategory();
 
-  if (!isset($_SESSION['role']) || $_SESSION['role'] === null || $_SESSION['role'] === '') {
+  if (!isset($_SESSION['role']) || $_SESSION['role'] === null || $_SESSION['role'] === 'auteur' || $_SESSION['role'] == 'user' ) {
     header('Location: ../vues/login.php');
     exit;
   }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -319,6 +320,22 @@ $category =$categorys->Countcategory();
                 <p onclick="removehidden()"
                   class="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
                   all Category</p>
+              </button>
+            </a>
+          </li>
+          <li>
+            <a class="" href="../dashorad/table_tag.php">
+              <button
+                class="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize"
+                type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+                  class="w-5 h-5 text-inherit">
+                  <path fill-rule="evenodd"
+                    d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z"
+                    clip-rule="evenodd"></path>
+                </svg>
+                <p class="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
+                  table tags </p>
               </button>
             </a>
           </li>

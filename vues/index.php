@@ -10,6 +10,8 @@ require_once "../class/class_Comments.php";
 require_once "../class/class_favorites.php";
 
 
+
+
  $article = new Article();
 
  if (isset($_POST['CategoryID'])) {
@@ -56,8 +58,9 @@ if (isset($_GET['AddTofavorites'])) {
 // } else {
 //     echo "Failed to send the email.";
 // }
-?>
 
+
+?>
 
 
 

@@ -22,6 +22,7 @@ class Register
         $db =new Database();
         $this->pdo = $db->getPdo();
        }
+
     public function insertUtilisateurs($username, $email, $password, $role)
     {
         $this->username = $username;
@@ -64,8 +65,26 @@ class Register
     }
     
 
+    
   
-
+    
+    public function EditeRoleUsers($id,$role){ 
+         
+        try {
+            $sql = "UPDATE utilisateurs SET role = :role WHERE utilisateurID = :id";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':role', $role, PDO::PARAM_STR);
+            $stmt->execute();
+            if ($stmt) {
+                echo "<script>window.location.href = '../dashorad/users.php';</script>";
+            }
+        } catch (PDOException $e) {
+            echo "Errors: " . $e->getMessage();
+        }
+    }
 }
+
+
 
 ?>

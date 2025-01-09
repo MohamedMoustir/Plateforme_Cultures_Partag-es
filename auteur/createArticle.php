@@ -10,20 +10,30 @@ require_once "../class/class_likes.php";
 require_once "../class/class_Comments.php";
 require_once "../class/class_tags.php";
 
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btn_submit'])) {
     if (isset($_POST['title']) && isset($_POST['description']) && isset($_POST['category']) && isset($_FILES['avatar'])) {
    
+     
         $title = $_POST['title'];
         $content = htmlspecialchars($_POST['description']);
         $category_id = htmlspecialchars($_POST['category']);
-        $author_id = $_SESSION['id_users'];
+        $author_id = $_SESSION['id_users']; 
         $image_path = $_FILES['avatar'];
-           $tags =  $_POST['tags'];  
-        
+        $tags = $_POST['tags'];  
+
         $article = new Article();
+
+        $article->setTitle($title);
+        $article->setContent($content);
+        $article->setCategory_id($category_id);
+        $article->setAuthor_id($author_id);
+        $article->setImage_pth($image_path);
+        $article->settags($tags);
+        
         $articleId = $article->createArticle($title, $content, $category_id, $author_id, $image_path, $tags);
+        
         $article->insertArticle_Tags($articleId, $tags);
+
         header("Location: ../auteur/createArticle.php?success=true");
         exit(); 
     }
@@ -56,7 +66,7 @@ $tags = new tags();
 $alltags = $tags->afficherTags();
 
 
-if (!isset($_SESSION['role']) || $_SESSION['role'] === '' || $_SESSION['role'] == 'user' ) {
+if (!isset($_SESSION['role']) || $_SESSION['role'] === '' || $_SESSION['role'] == 'user' || $_SESSION['role'] == 'admin' ) {
     header('Location: ../vues/login.php');
     exit;
   }

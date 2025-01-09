@@ -6,14 +6,9 @@ require_once   "class_rejister.php";
 class login extends Register
 {
 
-  public function __construct($email, $password)
-  {
-    $db = new Database();
-    $this->pdo = $db->getPdo();
-    $this->email = $email;
-    $this->password = $password;
-
-  }
+  public function __construct($email, $password) {
+    parent::__construct($email, $password); 
+}
 
   public function IsertionLogin()
   {

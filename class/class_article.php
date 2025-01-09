@@ -23,7 +23,7 @@
    $this->pdo = $db->getPdo();
   }
 
-  public function createArticle($title,$content,$category_id,$author_id,$upload_img,$tags){
+  public function createArticle($title, $content, $category_id, $author_id, $image_path, $tags){
     
    try{
     if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] === UPLOAD_ERR_OK) {
@@ -39,14 +39,13 @@
          
               }
                
-    $query = "INSERT INTO article (title,content,category_id, author_id,image,tags_id) VALUES (:title,:content,:category_id,:author_id,:upload_img,:tags_id)";
+    $query = "INSERT INTO article (title,content,category_id, author_id,image) VALUES (:title,:content,:category_id,:author_id,:upload_img)";
      $stmt = $this->pdo->prepare( $query);
     $stmt->bindParam(':title',$title,PDO::PARAM_STR);
     $stmt->bindParam(':content',$content,PDO::PARAM_STR);
     $stmt->bindParam(':category_id',$category_id,PDO::PARAM_INT);
     $stmt->bindParam(':author_id',$author_id , PDO::PARAM_INT);
     $stmt->bindParam(':upload_img',$this->upload_img,PDO::PARAM_STR);
-    $stmt->bindParam(':tags_id',$tags,PDO::PARAM_INT);
 
      $stmt->execute();
      return $this->pdo->lastInsertId();
@@ -142,17 +141,30 @@
 
 public function afficherDetailsArticle($id){
     try {
-        $query = "SELECT * FROM article
-        JOIN utilisateurs ON article.author_id = utilisateurs.utilisateurID 
-        JOIN category ON article.category_id = category.CategoryID 
+        $query = "SELECT *
+        FROM article
+        JOIN utilisateurs ON article.author_id = utilisateurs.utilisateurID
+        JOIN category ON article.category_id = category.CategoryID
+        JOIN article_tags ON article.id = article_tags.id_article
+        JOIN tags ON article_tags.id_tag = tags.idTag
         WHERE article.id = :id ";
 
         $stmt = $this->pdo->prepare($query);
         $stmt->bindParam(':id',$id,PDO::PARAM_INT);
         $stmt->execute();
-        $article = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $article;
-        
+        $article = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($article) {
+            $tags = array();
+            foreach ($article as $row) {
+                $tags[] = $row['nomTag'];  
+            }
+           
+            $articleDetails = $article[0]; 
+            $articleDetails['tags'] = $tags; 
+
+            return $articleDetails;
+        } 
     } catch (PDOException $e) {
         echo "Errors: " . $e->getMessage();
     }
@@ -352,6 +364,11 @@ public function ArticleCountAuteur($email) {
   {
       return $this->image_pth;
   }
+
+  public function gettags()
+  {
+      return $this->tags;
+  }
   // Setters
   public function setTitle($title)
   {
@@ -382,5 +399,8 @@ public function ArticleCountAuteur($email) {
       $this->image_pth = $image_pth;
   }
 
-  
+  public function settags($tags)
+  {
+      $this->tags = $tags;
+  }
 }

@@ -53,6 +53,35 @@ class Category {
   }
 }
 
+public function afficherCategoryById($id){
+
+    try {
+       $sql = "SELECT * FROM category WHERE CategoryID = :id ";
+       $stmt = $this->pdo->prepare($sql);
+      $stmt->bindParam(':id', $id);
+       $stmt->execute();
+       $allcategory = $stmt->fetch(PDO::FETCH_ASSOC);
+       return $allcategory ;
+    } catch (PDOException $e) {
+        echo "Errors: " . $e->getMessage();
+    }
+  }
+
+  public function Editecategory($names ,$CategoryID){ 
+         
+    try {
+        $sql = "UPDATE category SET names = :names WHERE CategoryID = :CategoryID";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':CategoryID', $CategoryID, PDO::PARAM_INT);
+        $stmt->bindParam(':names', $names, PDO::PARAM_STR);
+        $stmt->execute();
+        if ($stmt) {
+            echo "<script>window.location.href = '../dashorad/afficheCategory.php';</script>";
+        }
+    } catch (PDOException $e) {
+        echo "Errors: " . $e->getMessage();
+    }
+}
 
 public function Countcategory() {
   

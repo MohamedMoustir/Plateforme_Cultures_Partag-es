@@ -50,7 +50,7 @@ $article->approvedArticle($id);
 <body>
 
     
-    <form class="py-8 ml-[340px]" method="POST">
+    <form class="py-8 ml-[340px] z-[9999]" method="POST">
         <div class="w-full max-w-7xl mx-auto px-6 md:px-8">
             <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 lg:gap-0">
                 <div class="block">
