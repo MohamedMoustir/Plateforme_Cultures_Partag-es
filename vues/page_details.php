@@ -51,7 +51,7 @@ if (isset($_POST['comment']) || isset($_POST['comment_text'])) {
     } else {
        
         $comment->addComment($id_user, $id_article, $comment_text);
-        echo "<script>alert('Comment added successfully.');</script>";
+       
     }
 }
 
@@ -119,17 +119,12 @@ $id_article = $_GET['id'];
         <p class="text-lg mb-10 text-gray-600"><?= $Detail['content']; ?></p>
         <div class="mt-3">
     <!-- Tags section -->
-    <div class="tags space-x-3 mb-6">
-        <span class="inline-block bg-teal-200 text-teal-800 py-1 px-4 rounded-full text-sm font-semibold">
-            Tag1
-        </span>
-        <span class="inline-block bg-teal-200 text-teal-800 py-1 px-4 rounded-full text-sm font-semibold">
-            Tag2
-        </span>
-        <span class="inline-block bg-teal-200 text-teal-800 py-1 px-4 rounded-full text-sm font-semibold">
-            Tag3
-        </span>
-    </div>
+  
+    <div class="tags space-x-3 mb-2">
+    <?php foreach ($Detail['tags'] as $tag) {
+    echo '<span class="inline-block text-teal-800   rounded-full text-sm font-semibold">#' . htmlspecialchars($tag) . '</span>';
+    } ?>
+
 </div>
     </div>
 </header>
@@ -172,11 +167,7 @@ $id_article = $_GET['id'];
 
       <!-- Category and Description Section -->
       <div class="mt-12">
-        <div class="flex items-center space-x-6">
-        
-
-       
-         
+        <div class="flex items-center space-x-6">  
         </div>
 
       </div>

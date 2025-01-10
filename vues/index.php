@@ -14,18 +14,13 @@ require_once "../class/class_favorites.php";
 
  $article = new Article();
 
-if (isset($_POST['Filtre'])) {
+if (isset($_POST['CategoryID'])) {
     $id = htmlspecialchars($_POST['CategoryID']);
     header('Location: ../vues/index.php?page-nr=1&category=' . $id);
     exit(); 
 }
 
 
-if (isset($_POST['Search'])) {
-    $id = htmlspecialchars($_POST['SearchKeyword']);
-    header('Location: ../vues/index.php?page-nr=1&Search=' . $id);
-    exit(); 
-}
 
 
 
@@ -170,10 +165,9 @@ if (isset($_GET['AddTofavorites'])) {
         </div>
     </nav>
     <form method="POST" action="login.php?logout" class="d-flex justify-content-end p-2" style="position: absolute; top: 15%; right: 5%;">
-    <a href="page_favorets.php" type="submit" name="logout" class="bg-blue-700 text-white p-2 rounded mr-2">favorets</a>
-
+   
         <button type="submit" name="logout" class="bg-primary text-white p-2 rounded">Logout</button>
-        <!-- Profile image next to logout button -->
+       
         <a href="profile.php" class="profile ml-3" id="profile-pic">
             <img class="w-[36px] h-[36px] object-cover rounded-full" width="36" height="36" src="../upload/ef47b5d601.jpg" alt="Profile Picture">
         </a>
@@ -199,7 +193,7 @@ if (isset($_GET['AddTofavorites'])) {
                     </nav>
                 </div>
                 <div class="col-md-6 animated fadeIn">
-                    <img class="img-fluid" src="../img/header.jpg" alt="">
+                    <img class="img-fluid" src="https://images.pexels.com/photos/667202/pexels-photo-667202.jpeg?auto=compress&cs=tinysrgb&w=600" alt="">
                 </div>
             </div>
         </div>
@@ -227,6 +221,13 @@ if (isset($_GET['AddTofavorites'])) {
 
                                 </select>
                            </div>
+                           <div class="col-md-4">
+                                <select name="CategoryID" class="form-select border-0 py-3">
+                                <option value=""></option>
+                                   
+
+                                </select>
+                           </div>
                             
                         </div>
                         
@@ -235,15 +236,13 @@ if (isset($_GET['AddTofavorites'])) {
     <button type="submit" name="Search" class="btn btn-dark border-0 w-full py-3 bg-gray-800 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600">
         Search
     </button>
-    <!-- <button type="submit" name="Filtre" class="btn btn-dark border-0 w-full py-3 bg-gray-800 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600">
-        Filtre
-    </button> -->
+ 
 </div>
 
                 </div>
             </form>
         </div>
-        <!-- Search End -->
+ 
    
 
         <!-- Property List Start -->
@@ -252,9 +251,9 @@ if (isset($_GET['AddTofavorites'])) {
                 <div class="row g-0 gx-5 align-items-end">
                     <div class="col-lg-6">
                     <div class="text-start mx-auto mb-5 wow slideInLeft" data-wow-delay="0.1s">
-    <h1 class="mb-3">Explore Our Cultural Articles</h1>
-    <p>Discover a wide range of articles covering various aspects of art and culture. Whether you're interested in painting, music, literature, or cinema, you'll find content that inspires and educates.</p>
-</div>
+                <h1 class="mb-3">Explore Our Cultural Articles</h1>
+                <p>Discover a wide range of articles covering various aspects of art and culture. Whether you're interested in painting, music, literature, or cinema, you'll find content that inspires and educates.</p>
+            </div>
 
                     </div>
                     
@@ -262,7 +261,9 @@ if (isset($_GET['AddTofavorites'])) {
                     <div class="col-lg-6 text-start text-lg-end wow slideInRight" data-wow-delay="0.1s">
                         <ul class="nav nav-pills d-inline-flex justify-content-end mb-5">
                             <li class="nav-item me-2">
-                                <a class="btn btn-outline-primary active" data-bs-toggle="pill" href="#tab-1">Featured</a>
+                            <a href="page_favorets.php" type="submit" name="logout" class="bg-green-300 text-white p-2 rounded mr-2 d-flex align-items-center">
+                                    <i class="fa fa-heart me-2"></i> Favourites
+                                </a>
                             </li>
                             <li class="nav-item me-2">
                                 <a class="btn btn-outline-primary" data-bs-toggle="pill" href="#tab-2">For Sell</a>
@@ -273,7 +274,7 @@ if (isset($_GET['AddTofavorites'])) {
                         </ul>
                     </div>
                 </div>
-               
+   
 
                 <div class="tab-content">
     <div id="tab-1" class="tab-pane fade show p-0 active">
@@ -421,7 +422,7 @@ if (isset($_GET['AddTofavorites'])) {
                     <div class="bg-white rounded p-4" style="border: 1px dashed rgba(0, 185, 142, .3)">
                         <div class="row g-5 align-items-center">
                             <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
-                                <img class="img-fluid rounded w-100" src="../img/call-to-action.jpg" alt="">
+                                <img class="img-fluid rounded w-100" src="https://images.pexels.com/photos/943541/pexels-photo-943541.jpeg?auto=compress&cs=tinysrgb&w=600" alt="">
                             </div>
                             <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
                                 <div class="mb-4">

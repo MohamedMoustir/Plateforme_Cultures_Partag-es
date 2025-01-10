@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btn_submit'])) {
   }
 
   if (isset($_GET['id_article'])) { 
-    $id = $_GET['id'];
+    $id = $_GET['id_article'];
     $article = new Article();
    $Detail=$article->afficherDetailsArticle($id);
 

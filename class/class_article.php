@@ -181,22 +181,15 @@ public function afficherDetailsArticle($id){
 
 
 
-
- public function editArticle(
-    $title,
-    $content,
-    $category_id,
-    $author_id,
-    $upload_img,
-    $id
-) {
+ public function editArticle($title, $content, $category_id, $author_id, $id, $upload_img) {
     try {
+        // استخدام COALESCE لتحديد الصورة إذا كانت موجودة
         $sql = "UPDATE article SET
             title = :title,
             content = :content,
             category_id = :category_id,
             author_id = :author_id,
-            image = :upload_img
+            image = COALESCE(:upload_img, image)  -- إذا كانت الصورة الجديدة غير موجودة، يتم الاحتفاظ بالصورة القديمة
             WHERE id = :id";
 
         $stmt = $this->pdo->prepare($sql);
@@ -205,18 +198,19 @@ public function afficherDetailsArticle($id){
         $stmt->bindParam(':content', $content, PDO::PARAM_STR);
         $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
         $stmt->bindParam(':author_id', $author_id, PDO::PARAM_INT);
-        $stmt->bindParam(':upload_img', $upload_img, PDO::PARAM_STR);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':upload_img', $upload_img, PDO::PARAM_STR);
 
-        $stmt->execute();
-  if ($stmt) {
-  header('location:../auteur/createArticle.php');
-  }
-        return "Statut de l'activité mis à jour avec succès.";
+        if ($stmt->execute()) {
+            echo "<script>window.location.href = '../auteur/createArticle.php';</script>";
+        }  
+        exit();
     } catch (PDOException $e) {
         return "Erreur : " . $e->getMessage();
     }
 }
+
+
 
 
 public function removeArticle($id){
@@ -259,6 +253,7 @@ public function afficherArticleAdmin(){
         $query = "SELECT * FROM article
         JOIN utilisateurs ON article.author_id = utilisateurs.utilisateurID 
         JOIN category ON article.category_id = category.CategoryID  ";
+
 
         $stmt = $this->pdo->prepare($query);
        

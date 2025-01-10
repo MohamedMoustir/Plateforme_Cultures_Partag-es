@@ -32,7 +32,7 @@ class Comments
         
         public function SelectComment($id_article){
             try {
-                                    $query = "SELECT * FROM comments
+                $query = "SELECT * FROM comments
                 JOIN article ON comments.article_id = article.id
                 JOIN utilisateurs ON comments.user_id = utilisateurs.utilisateurID
                 WHERE  comments.article_id = :article_id";
@@ -45,8 +45,21 @@ class Comments
                 echo "Error: " . $e->getMessage();
               }
         }
-
-
+        
+        public function SelectAllComment(){
+            try {
+                $query = "SELECT * FROM comments
+                JOIN article ON comments.article_id = article.id
+                JOIN utilisateurs ON comments.user_id = utilisateurs.utilisateurID ";
+                $stmt = $this->pdo->prepare($query);
+                    $stmt->execute();
+                    $allcomment = $stmt->fetchAll(PDO::FETCH_OBJ);
+                    return $allcomment;
+            } catch (PDOException $e) {
+                echo "Error: " . $e->getMessage();
+              }
+        }
+ 
         public function CountCommit($content_id){
             try {
                 $stmt = "SELECT COUNT(*) AS allcomments FROM comments WHERE  article_id = :article_id";
@@ -66,7 +79,7 @@ class Comments
                 $stmt = " SELECT  COUNT(*) FROM comments 
             JOIN article on comments.article_id = article.id
             JOIN utilisateurs ON comments.user_id= utilisateurs.utilisateurID 
-            WHERE article.author_id  = :id";
+            WHERE article.author_id  = :id ";
                     $stmt = $this->pdo->prepare($stmt);
                     $stmt->bindParam(':id', $id, PDO::PARAM_INT); 
                     $stmt->execute();
@@ -77,6 +90,21 @@ class Comments
             }
           }
 
+
+          public function removecommites($id){
+            try {
+                $sql = "DELETE FROM comments WHERE id = :id ";
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->bindParam(':id', $id , PDO::PARAM_INT);
+                 $stmt->execute();
+
+                if ($stmt) {
+                    echo "<script>window.location.href = '../dashorad/table_commend.php;</script>";
+                }
+            } catch (PDOException $e) {
+                return "Erreur : " . $e->getMessage();
+            }
+          }
 
 }
 

@@ -118,8 +118,8 @@ require_once "../class/class_favorites.php";
             <a href="" class="btn btn-primary px-3 d-none d-lg-flex">Add Property</a>
         </div>
     </nav>
-    <form method="POST" action="../login.php?logout" class="d-flex justify-content-end p-2" style="position: absolute; top: 15%; right: 5%;">
-        <button type="submit" name="logout" class="bg-primary text-white p-2 rounded">Logout</button>
+    <form method="POST" action="index.php" class="d-flex justify-content-end p-2" style="position: absolute; top: 15%; right: 5%;">
+        <button type="submit" name="logout" class="bg-primary text-white p-2 rounded">   Accueil</button>
         <!-- Profile image next to logout button -->
         <a href="#" class="profile ml-3" id="profile-pic">
             <img class="w-[36px] h-[36px] object-cover rounded-full" width="36" height="36" src="../upload/ef47b5d601.jpg" alt="Profile Picture">
@@ -243,13 +243,7 @@ require_once "../class/class_favorites.php";
             
         </div>
     </div>
-</div>
-
-
-
-
-
-                    
+</div>    
             </div>
                     </div>
                 </div>

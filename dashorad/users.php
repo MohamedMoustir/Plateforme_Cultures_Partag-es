@@ -81,17 +81,17 @@ require_once "../class/class_users.php";
     </table>
 </div>
 <script>
-    $(document).ready(function() {
-        $('#usersTable').DataTable({
-            paging: true,
-            searching: true,
-            info: true,
-            responsive: true,
-            columnDefs: [
-                { orderable: false, targets: [4] }
-            ]
-        });
-    });
+    // $(document).ready(function() {
+    //     $('#usersTable').DataTable({
+    //         paging: true,
+    //         searching: true,
+    //         info: true,
+    //         responsive: true,
+    //         columnDefs: [
+    //             { orderable: false, targets: [4] }
+    //         ]
+    //     });
+    // });
 </script>
 </body>
 </html>

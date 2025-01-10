@@ -62,7 +62,7 @@ public function AjouteTags($names){
 
         public function removetag($id){
             try {
-                $sql = "DELETE FROM tags WHERE idTag = :id";
+                $sql = "DELETE  FROM tags WHERE idTag = :id";
                 $stmt = $this->pdo->prepare($sql);
                 $stmt->bindParam(':id', $id , PDO::PARAM_INT);
                  $stmt->execute();

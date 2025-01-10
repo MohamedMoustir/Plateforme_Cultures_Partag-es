@@ -25,6 +25,10 @@ class Register
 
     public function insertUtilisateurs($username, $email, $password, $role)
     {
+        
+
+   
+
         $this->username = $username;
         $this->email = $email;
         $this->password = password_hash($password, PASSWORD_BCRYPT);
