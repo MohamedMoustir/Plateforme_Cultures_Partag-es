@@ -14,11 +14,19 @@ require_once "../class/class_favorites.php";
 
  $article = new Article();
 
- if (isset($_POST['CategoryID'])) {
+if (isset($_POST['Filtre'])) {
     $id = htmlspecialchars($_POST['CategoryID']);
     header('Location: ../vues/index.php?page-nr=1&category=' . $id);
     exit(); 
 }
+
+
+if (isset($_POST['Search'])) {
+    $id = htmlspecialchars($_POST['SearchKeyword']);
+    header('Location: ../vues/index.php?page-nr=1&Search=' . $id);
+    exit(); 
+}
+
 
 
 
@@ -162,6 +170,8 @@ if (isset($_GET['AddTofavorites'])) {
         </div>
     </nav>
     <form method="POST" action="login.php?logout" class="d-flex justify-content-end p-2" style="position: absolute; top: 15%; right: 5%;">
+    <a href="page_favorets.php" type="submit" name="logout" class="bg-blue-700 text-white p-2 rounded mr-2">favorets</a>
+
         <button type="submit" name="logout" class="bg-primary text-white p-2 rounded">Logout</button>
         <!-- Profile image next to logout button -->
         <a href="profile.php" class="profile ml-3" id="profile-pic">
@@ -203,7 +213,7 @@ if (isset($_GET['AddTofavorites'])) {
                     <div class="col-md-10">
                         <div class="row g-2">
                             <div class="col-md-4">
-                                <input type="text" class="form-control border-0 py-3" placeholder="Search Keyword">
+                                <input type="text" name="SearchKeyword" class="form-control border-0 py-3" placeholder="Search Keyword">
                             </div>
                             <div class="col-md-4">
                                 <select name="CategoryID" class="form-select border-0 py-3">
@@ -214,22 +224,22 @@ if (isset($_GET['AddTofavorites'])) {
                                     
                                     }
                                          ?>
-                                   
+
                                 </select>
-                            </div>
-                            <div class="col-md-4">
-                                <select class="form-select border-0 py-3">
-                                    <option selected>Location</option>
-                                    <option value="1">Location 1</option>
-                                    <option value="2">Location 2</option>
-                                    <option value="3">Location 3</option>
-                                </select>
-                            </div>
+                           </div>
+                            
                         </div>
+                        
                     </div>
-                    <div class="col-md-2">
-                        <button type ="submit" class="btn btn-dark border-0 w-100 py-3">Search</button>
-                    </div>
+                    <div class="col-md-1 space-y-4 ">
+    <button type="submit" name="Search" class="btn btn-dark border-0 w-full py-3 bg-gray-800 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600">
+        Search
+    </button>
+    <!-- <button type="submit" name="Filtre" class="btn btn-dark border-0 w-full py-3 bg-gray-800 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600">
+        Filtre
+    </button> -->
+</div>
+
                 </div>
             </form>
         </div>
@@ -401,17 +411,7 @@ if (isset($_GET['AddTofavorites'])) {
         </div>
     
         <script>
-        function loadData(){
-            let myRequest = new XMLHttpRequest();
-            myRequest.onreadstatechange = function(){
-                if (this.readyState === 4 && this.status === 200) {
-                    console.log(this.responseText);
-                }
-            };
-            myRequest.open('GET',"?page-nr=mohamed",true);
-            myRequest.send();
-        }
-        
+       
         </script>
 
         <!-- Call to Action Start -->

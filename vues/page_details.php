@@ -27,13 +27,34 @@ $likeExists = $like->Getlike($id_article);
 
 
 $comment = new Comments();
-if (isset($_POST['comment'])|| isset($_POST['comment_text'])) {
+
+
+
+if (isset($_POST['comment']) || isset($_POST['comment_text'])) {
+    $comment_text = htmlspecialchars($_POST['comment_text']);
     $id_user = htmlspecialchars($_SESSION['id_users']);
     $id_article = htmlspecialchars($_GET['id']);
-    $comment_text = htmlspecialchars($_POST['comment_text']);
-    $comment->addComment($id_user, $id_article,$comment_text);
 
+    $sensitiveWords = ['hadi', 'ncchof', 'example', 'test'];
+
+    $hasSensitiveWord = false;
+
+    foreach ($sensitiveWords as $word) {
+        if (stripos($comment_text, $word) !== false) {
+            $hasSensitiveWord = true; 
+            break;
+        }
+    }
+  
+    if ($hasSensitiveWord) {
+        echo "<script>alert('Sensitive word found in the input.');</script>";
+    } else {
+       
+        $comment->addComment($id_user, $id_article, $comment_text);
+        echo "<script>alert('Comment added successfully.');</script>";
+    }
 }
+
 
 $id_article = $_GET['id'];
  $allcomment =$comment->SelectComment($id_article);
@@ -44,18 +65,7 @@ $id_article = $_GET['id'];
 }
 
 
-// require_once '../vendor/autoload.php'; 
-// $pdf = new \Mpdf\Mpdf(); 
-// $html = file_get_contents('vues\page_details.php');
-// $pdf->WriteHTML($html);
-// $pdf->Output('page_details.pdf', 'D');
-
 ?>
-
-
-
-
-
 
 
 <!DOCTYPE html>
@@ -68,6 +78,7 @@ $id_article = $_GET['id'];
     <meta content="" name="description">
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
 <style>
 
@@ -84,11 +95,9 @@ $id_article = $_GET['id'];
 
 
 
-
-<div class="flex flex-wrap"  id="mybilling">
+<div class="flex flex-wrap">
   <!-- Left Section -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-   <div class="w-full sm:w-8/12 mb-10 px-6 sm:px-10">
+  <div class="w-full sm:w-8/12 mb-10 px-6 sm:px-10">
     <div class="container mx-auto h-full">
       <nav class="flex justify-between items-center py-6">
         <div class="text-4xl font-bold text-gray-800">
@@ -103,22 +112,27 @@ $id_article = $_GET['id'];
       </nav>
       
 
-   <header class="lg:flex mt-12 items-center">
+<header class="lg:flex mt-12 items-center">
     <div class="w-full lg:w-8/12">
         <h1 class="text-4xl lg:text-5xl font-semibold text-gray-800 leading-tight mb-4">Partageons la Culture <span class="text-green-700"><?= $Detail['names']; ?></span></h1>
         <div class="w-20 h-2 bg-green-700 mb-6"></div>
         <p class="text-lg mb-10 text-gray-600"><?= $Detail['content']; ?></p>
         <div class="mt-3">
     <!-- Tags section -->
-    <div class="tags space-x-3 mb-2">
-    <?php foreach ($Detail['tags'] as $tag) {
-    echo '<span class="inline-block text-teal-800   rounded-full text-sm font-semibold">#' . htmlspecialchars($tag) . '</span>';
-    } ?>
-
-          </div>
-      </div>
-          </div>
-      </header>
+    <div class="tags space-x-3 mb-6">
+        <span class="inline-block bg-teal-200 text-teal-800 py-1 px-4 rounded-full text-sm font-semibold">
+            Tag1
+        </span>
+        <span class="inline-block bg-teal-200 text-teal-800 py-1 px-4 rounded-full text-sm font-semibold">
+            Tag2
+        </span>
+        <span class="inline-block bg-teal-200 text-teal-800 py-1 px-4 rounded-full text-sm font-semibold">
+            Tag3
+        </span>
+    </div>
+</div>
+    </div>
+</header>
 
 
       <!-- Likes, Comments, and Jim Section -->
@@ -129,7 +143,7 @@ $id_article = $_GET['id'];
         <form method="POST" class="flex justify-between items-center mt-6">
         <button type="submit" name="like" class="flex items-center text-teal-500 hover:bg-teal-500 hover:text-white px-6 py-3 rounded-full border-2 border-teal-500 hover:border-transparent transition duration-300">
     <i class="fas fa-thumbs-up mr-3"></i><?= $likeExists ?> J’aime
-  </button>
+</button>
 
             </form>
         
@@ -180,7 +194,6 @@ $id_article = $_GET['id'];
           </button>
         </form>
       </div>
-      <!-- <button class="text-red-500 hover:text-red-700 text-sm font-semibold py-1 px-3 rounded-lg border border-red-500 hover:bg-red-50 transition duration-200" onclick="printeArticle()">print</button> -->
 
       <!-- Existing Comments -->
       <div class="mt-8">
@@ -198,8 +211,6 @@ $id_article = $_GET['id'];
 
         <p class="text-gray-800 mt-2" id="comment-text"><?= $comment->comment_text ?></p>
     </div>
-    <!-- <button class="text-red-500 hover:text-red-700 text-sm font-semibold py-1 px-3 rounded-lg border border-red-500 hover:bg-red-50 transition duration-200" onclick="printeArticle()">print</button> -->
-
     <?php  if ($_SESSION['id_users'] == $Detail['id']){ ?>
     <div class="ml-4 space-x-2">
         <button class="text-teal-500 hover:text-teal-700 text-sm font-semibold py-1 px-3 rounded-lg border border-teal-500 hover:bg-teal-50 transition duration-200" onclick="editComment()">Edit</button>
@@ -216,11 +227,11 @@ $id_article = $_GET['id'];
   </div>
 
   <!-- Right Side Image -->
-  <div class="w-full sm:w-4/12">
+  <div class="w-full sm:w-4/12 fixed right-0 top-0">
     <img src="<?= $Detail['image'] ?>" alt="Leafs" class="w-full h-48 object-cover sm:h-screen sm:w-full rounded-lg shadow-lg">
-  </div>
 </div>
-<!-- <button class="text-red-500 hover:text-red-700 text-sm font-semibold py-1 px-3 rounded-lg border border-red-500 hover:bg-red-50 transition duration-200" onclick="generatePDF()">Generate PDF</button> -->
+
+</div>
 
 
 
@@ -232,8 +243,6 @@ $id_article = $_GET['id'];
 
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://unpkg.com/html2pdf.js@0.9.2/dist/html2pdf.bundle.js"></script>
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -248,25 +257,20 @@ $id_article = $_GET['id'];
 </body>
 <script>
 
-//   document.querySelectorAll('.emoji').forEach(emoji => {
-//       emoji.addEventListener('click', (event) => {
-//           const selectedEmoji = event.target.textContent;
-//           alert(`You selected: ${selectedEmoji}`);
+  document.querySelectorAll('.emoji').forEach(emoji => {
+      emoji.addEventListener('click', (event) => {
+          const selectedEmoji = event.target.textContent;
+          alert(`You selected: ${selectedEmoji}`);
       
       
-//       });
+      });
       
 
-//   });
-//         function getLike(iconClass) {
-//     const mainButtonIcon = document.querySelector('.fac'); 
-//     mainButtonIcon.className = iconClass; 
-
-//     function printeArticle(){
-//       let divcontent = document.getElementById('');
-//         }
-// }
-
+  });
+        function getLike(iconClass) {
+    const mainButtonIcon = document.querySelector('.fac'); 
+    mainButtonIcon.className = iconClass; 
+}
 
 </script>
 </html>

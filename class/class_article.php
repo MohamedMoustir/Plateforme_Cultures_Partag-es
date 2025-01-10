@@ -15,9 +15,6 @@
   private $tags; 
 
 
-
-
-
   public function __construct (){
    $db =new Database();
    $this->pdo = $db->getPdo();
@@ -80,18 +77,23 @@
         $starts = 0;
         $rows_pre_page = 6;
 
-     
         $recordQuery = "SELECT COUNT(*) FROM article
                         JOIN utilisateurs ON article.author_id = utilisateurs.utilisateurID
                         WHERE article.status = 'approved'";
-        
+
+       
         $filterQuery = "";
         if (isset($_GET['category']) && !empty($_GET['category'])) {
             $filterQuery = " AND article.category_id = :category_id";
         }
+
+        if (isset($_GET['Search']) && !empty($_GET['Search'])) {
+            $filterQuery .= " AND category.names LIKE :Search";
+        }
+
         if (isset($_GET['category']) && empty($_GET['category'])) { 
-                header('Location: ../vues/index.php?page-nr=1');
-                        
+            header('Location: ../vues/index.php?page-nr=1');
+            exit();
         }
 
         $recordQuery .= $filterQuery;
@@ -102,18 +104,20 @@
             $stmt->bindParam(':category_id', $_GET['category'], PDO::PARAM_INT);
         }
 
+        if (isset($_GET['Search']) && !empty($_GET['Search'])) {
+            $stmt->bindValue(':Search', '%' . $_GET['Search'] . '%', PDO::PARAM_STR);
+        }
+
         $stmt->execute();
         $record = $stmt->fetchColumn();
         $this->pages = ceil($record / $rows_pre_page);
 
         $page = 0;
-
         if (isset($_GET['page-nr'])) {
             $page = intval($_GET['page-nr']) - 1;
             $starts = $page * $rows_pre_page;
         }
 
-   
         $query = "SELECT * FROM article
                   JOIN utilisateurs ON article.author_id = utilisateurs.utilisateurID 
                   JOIN category ON article.category_id = category.CategoryID 
@@ -128,16 +132,21 @@
         if (!empty($filterQuery)) {
             $stmt->bindParam(':category_id', $_GET['category'], PDO::PARAM_INT);
         }
+        
+        if (isset($_GET['Search']) && !empty($_GET['Search'])) {
+            $stmt->bindValue(':Search', '%' . $_GET['Search'] . '%', PDO::PARAM_STR);
+        }
 
         $stmt->execute();
         $articleapproved = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
         return $articleapproved;
 
-        echo $pages;
     } catch (PDOException $e) {
         echo "Errors: " . $e->getMessage();
     }
 }
+
 
 public function afficherDetailsArticle($id){
     try {
